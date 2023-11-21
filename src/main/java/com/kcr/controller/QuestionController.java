@@ -7,6 +7,7 @@ import com.kcr.domain.entity.Question;
 import com.kcr.repository.QuestionRepository;
 import com.kcr.service.QuestionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class QuestionController {
@@ -44,13 +46,12 @@ public class QuestionController {
     }
 
     // 테스트 데이터
-    @PostConstruct
-    public void init() {
-        for(int i = 1; i <= 100; i++) {
-            questionRepository.save(new Question("title" + i, "writer" + i, "content" + i, 100L + i, 100L));
-        }
-    }
-
+//    @PostConstruct
+//    public void init() {
+//        for(int i = 1; i <= 100; i++) {
+//            questionRepository.save(new Question("title" + i, "writer" + i, "content" + i, 100L + i, 100L));
+//        }
+//    }
 
     /* ================ UI ================ */
     /* 게시글 수정 화면 */
@@ -94,6 +95,7 @@ public class QuestionController {
     }
 
     /* 좋아요 업데이트 */
+
 
     /* 게시글 제목 검색 */
     @GetMapping("/question/search")

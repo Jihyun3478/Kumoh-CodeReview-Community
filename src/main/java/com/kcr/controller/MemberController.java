@@ -1,7 +1,7 @@
 package com.kcr.controller;
 
 import com.kcr.domain.dto.member.MemberRequestDTO;
-import com.kcr.domain.dto.member.Response;
+import com.kcr.domain.dto.Response;
 import com.kcr.service.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package com.kcr.domain.dto.member;
+package com.kcr.domain.dto;
 
 import lombok.Getter;
 import lombok.Setter;

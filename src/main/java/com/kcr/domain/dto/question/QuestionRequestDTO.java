@@ -1,14 +1,15 @@
 package com.kcr.domain.dto.question;
 
 import com.kcr.domain.entity.Question;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /* 게시글의 등록과 수정을 처리할 요청 클래스 */
 @Getter
-//@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor // (access = AccessLevel.PROTECTED)
 public class QuestionRequestDTO {
     private String title;
     private String writer;

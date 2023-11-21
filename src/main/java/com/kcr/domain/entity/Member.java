@@ -5,8 +5,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-import static javax.persistence.FetchType.LAZY;
-
 @Entity
 @Getter
 @Table(name = "members")
@@ -32,13 +30,13 @@ public class Member extends BaseTimeEntity {
     private String stuNum;
 
     @Enumerated(EnumType.STRING)
-    @Column
+    @Column(nullable = false)
     private final RoleType roleType = RoleType.ROLE_NOT_PERMITTED;
 
     private Long activityScore;
 
     /* 연관관계 */
-    @OneToOne(fetch = LAZY, cascade = CascadeType.ALL)
+    @OneToOne // (fetch = LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "SALT_ID")
     private Salt salt;
 
