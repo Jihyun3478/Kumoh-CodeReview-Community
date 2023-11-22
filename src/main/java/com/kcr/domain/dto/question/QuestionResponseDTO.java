@@ -2,6 +2,7 @@ package com.kcr.domain.dto.question;
 
 import com.kcr.domain.dto.chatGPT.ChatGptResponse;
 import com.kcr.domain.dto.questioncomment.QuestionCommentResponseDTO;
+import com.kcr.domain.entity.Member;
 import com.kcr.domain.entity.Question;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,21 +19,22 @@ import java.util.stream.Collectors;
 public class QuestionResponseDTO {
     private final Long id;
     private final String title;
-    private final String writer;
+    private final Member member;
+//    private final String writer;
     private final String content;
     private final String createDate;
     private final Long likes;
     private final Long views;
     private List<QuestionCommentResponseDTO> questionComments;
     private ChatGptResponse chatGPT;
-//        private final Long memberId;
 
     /* Entity -> DTO */
     @Builder
-    public QuestionResponseDTO(Long id, String title, String writer, String content, String createDate, Long likes, Long views) {
+    public QuestionResponseDTO(Long id, String title, Member member, String content, String createDate, Long likes, Long views) {
         this.id = id;
         this.title = title;
-        this.writer = writer;
+        this.member = member;
+//        this.writer = writer;
         this.content = content;
         this.createDate = createDate;
         this.likes = likes;
@@ -43,13 +45,12 @@ public class QuestionResponseDTO {
     public QuestionResponseDTO(Question question) {
         this.id = question.getId();
         this.title = question.getTitle();
-        this.writer = question.getWriter();
+        this.member = getMember();
+//        this.writer = question.getWriter();
         this.content = question.getContent();
         this.createDate = question.getCreateDate();
         this.likes = question.getLikes();
         this.views = question.getViews();
         this.questionComments= question.getQuestionComments().stream().map(QuestionCommentResponseDTO::new).collect(Collectors.toList());
-       // this.chatGPT=question.getChatGPT().;
-//            this.memberId = question.getMember().getId();
     }
 }

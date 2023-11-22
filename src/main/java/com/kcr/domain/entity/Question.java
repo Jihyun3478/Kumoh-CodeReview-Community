@@ -25,7 +25,7 @@ public class Question extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private String writer;
 
     @NotEmpty

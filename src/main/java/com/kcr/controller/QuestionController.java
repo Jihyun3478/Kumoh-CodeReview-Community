@@ -3,7 +3,7 @@ package com.kcr.controller;
 import com.kcr.domain.dto.question.QuestionListResponseDTO;
 import com.kcr.domain.dto.question.QuestionRequestDTO;
 import com.kcr.domain.dto.question.QuestionResponseDTO;
-import com.kcr.domain.entity.Question;
+import com.kcr.domain.dto.member.security.MyUserDetails;
 import com.kcr.repository.QuestionRepository;
 import com.kcr.service.QuestionService;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +14,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import javax.annotation.PostConstruct;
 
 @Slf4j
 @RestController
@@ -25,13 +25,16 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final QuestionRepository questionRepository;
+    private Authentication authentication;
 
     /* ================ API ================ */
     /* 게시글 등록 */
-    @PostMapping("/api/question")
-    public Long save(@RequestBody QuestionRequestDTO requestDTO) {
-        return questionService.save(requestDTO);
-    }
+//    @PostMapping("/api/question")
+//    public Long save(@RequestBody QuestionRequestDTO requestDTO, @AuthenticationPrincipal MyUserDetails myUserDetails) {
+//        return questionService.save(requestDTO, myUserDetails.getMember());
+//        requestDTO.setWriter(loginDTO.getLoginId());
+//        return questionService.save(requestDTO);
+//    }
 
     /* 게시글 수정 */
     @PatchMapping("/api/question/{id}")
@@ -62,7 +65,6 @@ public class QuestionController {
          QuestionResponseDTO.builder()
                 .id(responseDTO.getId())
                 .title(responseDTO.getTitle())
-                .writer(responseDTO.getWriter())
                 .content(responseDTO.getContent())
                 .createDate(responseDTO.getCreateDate())
                 .likes(responseDTO.getLikes())

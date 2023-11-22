@@ -3,9 +3,12 @@ package com.kcr.service;
 import com.kcr.domain.dto.question.QuestionListResponseDTO;
 import com.kcr.domain.dto.question.QuestionRequestDTO;
 import com.kcr.domain.dto.question.QuestionResponseDTO;
+import com.kcr.domain.entity.Member;
 import com.kcr.domain.entity.Question;
+import com.kcr.repository.MemberRepository;
 import com.kcr.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
@@ -17,10 +20,14 @@ import org.springframework.transaction.annotation.Transactional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+    private final MemberRepository memberRepository;
+    private Neo4jProperties.Authentication authentication;
 
     /* 게시글 등록 */
     @Transactional // 메소드 실행 시 트랜잭션 시작 -> 정상 종료되면 커밋 / 에러 시 롤백
     public Long save(QuestionRequestDTO requestDTO) {
+//        Member member = memberRepository.findByNickname(nickname);
+//        requestDTO.setMember(member);
         return questionRepository.save(requestDTO.toSaveEntity()).getId();
     }
 
@@ -54,11 +61,11 @@ public class QuestionService {
     public QuestionResponseDTO findById(Long id) {
         Question question = questionRepository.findById(id)
                 .orElseThrow(IllegalArgumentException::new);
-
+        Member member = null;
         return QuestionResponseDTO.builder()
                 .id(question.getId())
                 .title(question.getTitle())
-                .writer(question.getWriter())
+//                .member(member.getMember())
                 .content(question.getContent())
                 .createDate(question.getCreateDate())
                 .likes(question.getLikes())

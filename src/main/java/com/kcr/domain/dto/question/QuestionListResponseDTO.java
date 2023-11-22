@@ -1,5 +1,6 @@
 package com.kcr.domain.dto.question;
 
+import com.kcr.domain.entity.Member;
 import com.kcr.domain.entity.Question;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,18 +12,19 @@ import lombok.Getter;
 public class QuestionListResponseDTO {
     private final Long id;
     private final String title;
-    private final String writer;
+    private final Member member;
+//    private final String writer;
     private final String createDate;
     private final Long likes;
     private final Long views;
-//        private final Long memberId;
 
     /* Entity -> DTO */
     @Builder
-    public QuestionListResponseDTO(Long id, String title, String writer, String createDate, Long likes, Long views) {
+    public QuestionListResponseDTO(Long id, String title, Member member, String createDate, Long likes, Long views) {
         this.id = id;
         this.title = title;
-        this.writer = writer;
+        this.member = member;
+//        this.writer = writer;
         this.createDate = createDate;
         this.likes = likes;
         this.views = views;
@@ -31,10 +33,10 @@ public class QuestionListResponseDTO {
     public QuestionListResponseDTO(Question question) {
         this.id = question.getId();
         this.title = question.getTitle();
-        this.writer = question.getWriter();
+        this.member = getMember();
+//        this.writer = question.getWriter();
         this.createDate = question.getCreateDate();
         this.likes = question.getLikes();
         this.views = question.getViews();
-//            this.memberId = question.getMember().getId();
     }
 }
