@@ -1,10 +1,7 @@
 package com.kcr.domain.entity;
 
 import com.kcr.domain.type.ReportType;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -28,4 +25,11 @@ public class Report {
 
     @Enumerated(EnumType.STRING)
     private ReportType reportType;
+
+    @Builder
+    public Report(String content,ReportType reportType,String title){
+        this.content = content;
+        this.reportType = reportType;
+        this.title = title;
+    }
 }

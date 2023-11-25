@@ -36,12 +36,12 @@ public class QuestionService {
 
     /* 게시글 등록 */
     @Transactional // 메소드 실행 시 트랜잭션 시작 -> 정상 종료되면 커밋 / 에러 시 롤백
-    public QuestionResponseDTO save(QuestionRequestDTO requestDTO, Member member) { //
-        Question question = new Question(requestDTO, member); //
+    public QuestionResponseDTO save(QuestionRequestDTO requestDTO, Member member) {
+        Question question = new Question(requestDTO, member);
         Question savedQuestion = questionRepository.save(question);
 
         ChatGptResponse chatGptResponse = null;
-        chatGptResponse= chatGptService.askQuestion2(question,chatGptResponse);
+        chatGptResponse= chatGptService.askQuestion2(savedQuestion,chatGptResponse);
         ChatGPT chatGPT =  chatGptResponse.toSaveEntity();
         System.out.println("chatgpt data : "+chatGPT.getId()+" "+chatGPT.getGptContent()+" "+chatGPT.getQuestion().getId());
         chatGPTRepository.save(chatGPT);

@@ -41,9 +41,7 @@ public class QuestionController {
 
     @GetMapping("/api/all")
     public ResponseEntity<String> test(@AuthenticationPrincipal MyUserDetails myUserDetails) {
-
         System.out.println(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-
         return ResponseEntity.ok("success");
 
     }
