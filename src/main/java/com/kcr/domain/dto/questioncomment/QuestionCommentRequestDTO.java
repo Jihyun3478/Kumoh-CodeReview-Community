@@ -13,14 +13,15 @@ import lombok.Setter;
 public class QuestionCommentRequestDTO {
     private Long id;
     private String content;
-    private Long likes;
+    private Long totalLikes;
     private String writer;
     private Question question;
+    private String createDate;
     private QuestionComment parentComment;
     @Builder
-    public QuestionCommentRequestDTO(String content,Long likes, String writer) {
+    public QuestionCommentRequestDTO(String content,Long totalLikes, String writer) {
         this.content = content;
-        this.likes = likes;
+        this.totalLikes = totalLikes;
         this.writer = writer;
     }
     /* DTO -> Entity */
@@ -29,7 +30,7 @@ public class QuestionCommentRequestDTO {
                 .id(id)
                 .content(content)
                 .writer(writer)
-                .likes(0L)
+                .totalLikes(0L)
                 .question(question)
                 .build();
     }

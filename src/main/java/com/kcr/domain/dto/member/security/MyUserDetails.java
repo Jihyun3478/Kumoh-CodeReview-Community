@@ -15,10 +15,15 @@ import java.util.Collection;
 @RequiredArgsConstructor
 public class MyUserDetails implements UserDetails {
 
-    private final Member member;
+    private final Member member; // 1
 
     public Member getMember() {
         return member;
+    } // 2
+
+    @Override
+    public String getPassword() {
+        return member.getLoginPw();
     }
 
     @Override
@@ -26,18 +31,9 @@ public class MyUserDetails implements UserDetails {
         return member.getLoginId();
     }
 
-    @Override
-    public String getPassword() {
-        return member.getLoginPw();
-    }
-
-    public String getNickname() {
-        return member.getNickname();
-    }
-
     // 사용자의 권한을 GrantedAuthority 로 추상화 및 반환
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
+    public Collection<? extends GrantedAuthority> getAuthorities() { // 3
         RoleType roleType = member.getRoleType();
         String authority = roleType.getAuthority();
 

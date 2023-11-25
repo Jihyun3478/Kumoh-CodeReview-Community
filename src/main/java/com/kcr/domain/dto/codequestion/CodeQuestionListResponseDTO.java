@@ -1,6 +1,7 @@
 package com.kcr.domain.dto.codequestion;
 
 import com.kcr.domain.entity.CodeQuestion;
+import com.kcr.domain.entity.Question;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,18 +14,18 @@ public class CodeQuestionListResponseDTO {
     private final String title;
     private final String writer;
     private final String createDate;
-    private final Long likes;
+    private final Long totalLikes;
     private final Long views;
 //        private final Long memberId;
 
     /* Entity -> DTO */
     @Builder
-    public CodeQuestionListResponseDTO(Long id, String title, String writer, String createDate, Long likes, Long views) {
+    public CodeQuestionListResponseDTO(Long id, String title, String writer, String createDate, Long totalLikes, Long views) {
         this.id = id;
         this.title = title;
         this.writer = writer;
         this.createDate = createDate;
-        this.likes = likes;
+        this.totalLikes = totalLikes;
         this.views = views;
     }
 
@@ -33,7 +34,7 @@ public class CodeQuestionListResponseDTO {
         this.title = codeQuestion.getTitle();
         this.writer = codeQuestion.getWriter();
         this.createDate = codeQuestion.getCreateDate();
-        this.likes = codeQuestion.getLikes();
+        this.totalLikes = codeQuestion.getTotalLikes();
         this.views = codeQuestion.getViews();
 //            this.memberId = question.getMember().getId();
     }

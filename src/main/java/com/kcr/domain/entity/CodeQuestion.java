@@ -1,5 +1,8 @@
 package com.kcr.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kcr.domain.dto.codequestion.CodeQuestionRequestDTO;
+import com.kcr.domain.dto.question.QuestionRequestDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -9,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @Builder
 @Table(name = "codequestion")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -33,7 +37,13 @@ public class CodeQuestion extends BaseTimeEntity {
     @Column(columnDefinition = "LONGTEXT", nullable = false)
     private String codeContent;
 
-    private Long likes;
+    @Column(columnDefinition = "integer default 0")
+    private Long totalLikes = 0L;
+
+    @OneToMany(mappedBy = "codeQuestion")
+    @Builder.Default
+    @JsonIgnore
+    private List<Likes> likes= new ArrayList<>();
 
     @Column(columnDefinition = "integer default 0")
     private Long views;
@@ -47,24 +57,29 @@ public class CodeQuestion extends BaseTimeEntity {
     private final List<CodeQuestionComment> codeQuestionComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "codeQuestion")
-    private final List<Image> images = new ArrayList<>();
-
-    @OneToMany(mappedBy = "codeQuestion")
     private final List<HashTag> hashTags = new ArrayList<>();
 
     /* 생성자 */
-    public CodeQuestion(String title, String writer, String content, String codeContent, Long likes, Long views) {
+    public CodeQuestion(String title, String writer, String content, String codeContent, Long totalLikes, Long views) {
         this.title = title;
         this.writer = writer;
         this.content = content;
         this.codeContent = codeContent;
-        this.likes = likes;
+        this.totalLikes = totalLikes;
         this.views = views;
+    }
+
+    public CodeQuestion(CodeQuestionRequestDTO requestDto, Member member) {
+        this.title = requestDto.getTitle();
+        this.writer = member.getNickname();
+        this.content = requestDto.getContent();
+        this.codeContent = requestDto.getCodeContent();
+        this.member = member;
     }
 
     /* 비즈니스 로직 */
     /* 게시글 수정 */
-    public void updateQuestion(String title, String content, String codeContent) {
+    public void updateCodeQuestion(String title, String content, String codeContent) {
         this.title = title;
         this.content = content;
         this.codeContent = codeContent;

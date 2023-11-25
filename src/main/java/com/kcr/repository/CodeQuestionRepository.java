@@ -9,9 +9,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface CodeQuestionRepository extends JpaRepository<CodeQuestion, Long> {
 
     Page<CodeQuestion> findAll(Pageable pageable);
+    Optional<CodeQuestion> findByIdAndMemberId(Long questionId, Long memberId);
+    Page<CodeQuestionListResponseDTO> findTop5ByOrderByCreateDateDesc(Pageable pageable);
 
     Page<CodeQuestionListResponseDTO> findByTitleContaining(String title, Pageable pageable);
 
@@ -20,8 +24,4 @@ public interface CodeQuestionRepository extends JpaRepository<CodeQuestion, Long
     @Modifying
     @Query("update CodeQuestion cq set cq.views = cq.views + 1 where cq.id=:id")
     void updateViews(@Param("id") Long id);
-
-    @Modifying
-    @Query("update CodeQuestion cq set cq.likes = cq.likes + 1 where cq.id=:id")
-    void updateLikes(@Param("id")Long id);
 }

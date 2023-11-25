@@ -2,15 +2,17 @@ package com.kcr.domain.entity;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+
 import javax.persistence.*;
 
+
+//Question과 식별관계
 @Entity
 @Getter
 @Setter
 @Table(name = "chatgpt")
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ChatGPT {
     @Id @GeneratedValue
     @Column(name = "CHATGPT_ID")
@@ -32,6 +34,9 @@ public class ChatGPT {
         this.id=id;
         this.gptContent = gptContent;
         this.question = question;
+    }
+
+    public ChatGPT() {
     }
 }
 

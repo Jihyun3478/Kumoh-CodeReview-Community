@@ -4,10 +4,12 @@ import com.kcr.domain.entity.Member;
 import com.kcr.domain.type.RoleType;
 import javassist.NotFoundException;
 
-public interface AuthService {
-    void signUp(Member member);
+import java.util.Optional;
 
-    Member signIn(String loginId, String loginPw);
+public interface AuthService {
+//    void signup(Member member);
+//
+//    Member login(String loginId, String loginPw) throws Exception;
     final String REDIS_CHANGE_PASSWORD_PREFIX="CPW";
 
     Member findByLoginId(String LoginId) throws NotFoundException;
@@ -17,10 +19,10 @@ public interface AuthService {
     void sendVerificationMail(Member member) throws NotFoundException;
 
     void modifyUserRole(Member member, RoleType roleType);
-//
+
 //    boolean isPasswordUuidValidate(String key);
-//
+
 //    void changePassword(Member member, String password) throws NotFoundException;
-//
+
 //    void requestChangePassword(Member member) throws NotFoundException;
 }

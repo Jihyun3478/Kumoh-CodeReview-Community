@@ -1,7 +1,9 @@
 package com.kcr.controller;
 
+import com.kcr.domain.dto.codequestion.CodeQuestionListResponseDTO;
 import com.kcr.domain.dto.question.QuestionListResponseDTO;
-import com.kcr.repository.HomeRepository;
+import com.kcr.repository.CodeQuestionRepository;
+import com.kcr.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,11 +16,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class HomeController {
 
-    private final HomeRepository homeRepository;
+    private final QuestionRepository questionRepository;
+    private final CodeQuestionRepository codeQuestionRepository;
 
     @GetMapping("/")
-    public ResponseEntity<Page<QuestionListResponseDTO>> findTop5(Pageable pageable) {
-        Page<QuestionListResponseDTO> questionListResponseDTOS = homeRepository.findTop5ByOrderByCreateDateDesc(pageable);
+    public ResponseEntity<Page<QuestionListResponseDTO>> findTop5Question(Pageable pageable) {
+        Page<QuestionListResponseDTO> questionListResponseDTOS = questionRepository.findTop5ByOrderByCreateDateDesc(pageable);
         return new ResponseEntity<>(questionListResponseDTOS, HttpStatus.OK);
     }
+
+//    @GetMapping("/")
+//    public ResponseEntity<Page<CodeQuestionListResponseDTO>> findTop5CodeQuestion(Pageable pageable) {
+//        Page<CodeQuestionListResponseDTO> codeQuestionListResponseDTOS = codeQuestionRepository.findTop5ByOrderByCreateDateDesc(pageable);
+//        return new ResponseEntity<>(codeQuestionListResponseDTOS, HttpStatus.OK);
+//    }
 }

@@ -1,9 +1,11 @@
 package com.kcr.domain.dto.question;
 
-import com.kcr.domain.entity.Member;
+import com.kcr.domain.entity.Likes;
 import com.kcr.domain.entity.Question;
 import lombok.Builder;
 import lombok.Getter;
+
+import java.util.List;
 
 /* 게시글 정보를 리턴할 응답 클래스 */
 /* Entity 클래스를 생성자 파라미터로 받아 데이터를 DTO로 변환하여 응답 */
@@ -12,31 +14,30 @@ import lombok.Getter;
 public class QuestionListResponseDTO {
     private final Long id;
     private final String title;
-    private final Member member;
-//    private final String writer;
+    private final String writer;
     private final String createDate;
-    private final Long likes;
+    private final Long totalLikes;
     private final Long views;
+//        private final Long memberId;
 
     /* Entity -> DTO */
     @Builder
-    public QuestionListResponseDTO(Long id, String title, Member member, String createDate, Long likes, Long views) {
+    public QuestionListResponseDTO(Long id, String title, String writer, String createDate, Long totalLikes, Long views) {
         this.id = id;
         this.title = title;
-        this.member = member;
-//        this.writer = writer;
+        this.writer = writer;
         this.createDate = createDate;
-        this.likes = likes;
+        this.totalLikes = totalLikes;
         this.views = views;
     }
 
     public QuestionListResponseDTO(Question question) {
         this.id = question.getId();
         this.title = question.getTitle();
-        this.member = getMember();
-//        this.writer = question.getWriter();
+        this.writer = question.getWriter();
         this.createDate = question.getCreateDate();
-        this.likes = question.getLikes();
+        this.totalLikes = question.getTotalLikes();
         this.views = question.getViews();
+//            this.memberId = question.getMember().getId();
     }
 }

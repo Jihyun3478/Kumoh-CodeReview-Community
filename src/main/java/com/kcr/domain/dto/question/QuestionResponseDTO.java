@@ -19,25 +19,24 @@ import java.util.stream.Collectors;
 public class QuestionResponseDTO {
     private final Long id;
     private final String title;
-    private final Member member;
-//    private final String writer;
+    private final String writer;
     private final String content;
     private final String createDate;
-    private final Long likes;
+    private final Long totalLikes;
     private final Long views;
     private List<QuestionCommentResponseDTO> questionComments;
     private ChatGptResponse chatGPT;
+//        private final Long memberId;
 
     /* Entity -> DTO */
     @Builder
-    public QuestionResponseDTO(Long id, String title, Member member, String content, String createDate, Long likes, Long views) {
+    public QuestionResponseDTO(Long id, String title, String writer, String content, String createDate, Long totalLikes, Long views) {
         this.id = id;
         this.title = title;
-        this.member = member;
-//        this.writer = writer;
+        this.writer = writer;
         this.content = content;
         this.createDate = createDate;
-        this.likes = likes;
+        this.totalLikes = totalLikes;
         this.views = views;
 
     }
@@ -45,12 +44,13 @@ public class QuestionResponseDTO {
     public QuestionResponseDTO(Question question) {
         this.id = question.getId();
         this.title = question.getTitle();
-        this.member = getMember();
-//        this.writer = question.getWriter();
+        this.writer = question.getWriter();
         this.content = question.getContent();
         this.createDate = question.getCreateDate();
-        this.likes = question.getLikes();
+        this.totalLikes = question.getTotalLikes();
         this.views = question.getViews();
         this.questionComments= question.getQuestionComments().stream().map(QuestionCommentResponseDTO::new).collect(Collectors.toList());
+        // this.chatGPT=question.getChatGPT().;
+//            this.memberId = question.getMember().getId();
     }
 }

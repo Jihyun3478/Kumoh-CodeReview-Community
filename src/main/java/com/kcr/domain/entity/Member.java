@@ -35,25 +35,11 @@ public class Member extends BaseTimeEntity {
 
     private Long activityScore;
 
-    /* 연관관계 */
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "SALT_ID")
-    private Salt salt;
-
-    @OneToOne // (fetch = LAZY)
-    @JoinColumn(name = "IMAGE_ID")
-    private Image image;
-
-    public Member(@NotBlank String loginId, @NotBlank String loginPw, @NotBlank String nickname, @NotBlank String stuNum) {
-        this.loginId = loginId;
-        this.loginPw = loginPw;
-        this.nickname = nickname;
-        this.stuNum = stuNum;
-    }
-
-    public Member(String loginId, String loginPw, RoleType roleType) {
+    public Member(String loginId, String loginPw, RoleType roleType, String nickname, String stuNum) {
         this.loginId = loginId;
         this.loginPw = loginPw;
         this.roleType = roleType;
+        this.nickname = nickname;
+        this.stuNum = stuNum;
     }
 }
