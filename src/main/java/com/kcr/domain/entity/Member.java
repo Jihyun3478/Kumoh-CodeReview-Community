@@ -1,10 +1,13 @@
 package com.kcr.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kcr.domain.type.RoleType;
 import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,7 +36,26 @@ public class Member extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private RoleType roleType = RoleType.NOT_PERMITTED;
 
-    private Long activityScore;
+    /* 연관관계 */
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "SALT_ID")
+    private Salt salt;
+
+    @OneToOne
+    @JoinColumn(name = "QUESTION_ID")
+    private Question question;
+
+    @OneToOne
+    @JoinColumn(name = "CODE_QUESTION_ID")
+    private CodeQuestion codeQuestion;
+
+    @OneToOne
+    @JoinColumn(name = "QUESTION_COMMENT_ID")
+    private QuestionComment questionComment;
+
+    @OneToOne
+    @JoinColumn(name = "CODE_QUESTION_COMMENT_ID")
+    private CodeQuestionComment codeQuestionComment;
 
     public Member(String loginId, String loginPw, RoleType roleType, String nickname, String stuNum) {
         this.loginId = loginId;

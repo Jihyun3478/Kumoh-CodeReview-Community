@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kcr.domain.dto.codequestion.CodeQuestionRequestDTO;
 import com.kcr.domain.dto.question.QuestionRequestDTO;
 import lombok.*;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -49,11 +50,15 @@ public class CodeQuestion extends BaseTimeEntity {
     private Long views;
 
     /* 연관관계 */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "username")
+    @OneToOne(mappedBy = "questionComment")
     private Member member;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "MEMBER_ID")
+//    private Member member;
 
-    @OneToMany(mappedBy = "codeQuestion", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "codeQuestion", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Where(clause = "parent_id is null")
+    @JsonIgnore
     private final List<CodeQuestionComment> codeQuestionComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "codeQuestion")
@@ -69,12 +74,11 @@ public class CodeQuestion extends BaseTimeEntity {
         this.views = views;
     }
 
-    public CodeQuestion(CodeQuestionRequestDTO requestDto, Member member) {
+    public CodeQuestion(CodeQuestionRequestDTO requestDto) {
         this.title = requestDto.getTitle();
-        this.writer = member.getNickname();
+        this.writer = requestDto.getWriter();
         this.content = requestDto.getContent();
         this.codeContent = requestDto.getCodeContent();
-        this.member = member;
     }
 
     /* 비즈니스 로직 */

@@ -25,9 +25,6 @@ spring:
     host: localhost
     port: 6379
 
-  jwt:
-    secret: kcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcrkcr
-
   mail:
     host: smtp.gmail.com
     port: 587
@@ -39,6 +36,11 @@ spring:
           auth: true
           starttls:
             enable: true
+
+server:
+  servlet:
+    session:
+      timeout: 1800
 
 logging.level:
     org:
@@ -52,7 +54,7 @@ logging.level:
 # 여기부터 새로 추가하는 설정
 openai:
   api:
-    token: "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"
+    token: "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"
   url:
     endpoint: https://api.openai.com/v1/completions
   model: text-davinci-003

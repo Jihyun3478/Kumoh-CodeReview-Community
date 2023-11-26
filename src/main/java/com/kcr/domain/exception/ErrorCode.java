@@ -17,7 +17,9 @@ public enum ErrorCode {
     NOT_FOUND_BOARD_OR_AUTHORIZATION(HttpStatus.BAD_REQUEST, "게시글을 찾을 수 없거나 작성자만 삭제/수정할 수 있습니다."),
 
     // DB 에 이미 존재하는 username 으로 회원가입 요청한 경우
-    DUPLICATED_USERNAME(HttpStatus.BAD_REQUEST, "중복된 username 입니다"),
+    DUPLICATED_ID(HttpStatus.BAD_REQUEST, "중복된 아이디 입니다"),
+    // DB 에 이미 존재하는 username 으로 회원가입 요청한 경우
+    DUPLICATED_NICKNAME(HttpStatus.BAD_REQUEST, "중복된 아이디 입니다"),
 
     // 로그인 시, username 과 password 중 일치하지 않는 정보가 있을 경우
     NOT_MATCH_INFORMATION(HttpStatus.BAD_REQUEST, "회원을 찾을 수 없습니다."),

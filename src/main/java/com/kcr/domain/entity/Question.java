@@ -42,14 +42,17 @@ public class Question extends BaseTimeEntity {
     private Long views;
 
     /* 연관관계 */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "MEMBER_ID")
+    @OneToOne(mappedBy = "question")
     private Member member;
+
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "MEMBER_ID")
+//    private Member member;
 
     @OneToMany(mappedBy = "question",cascade = CascadeType.ALL, orphanRemoval = true)
     @Where(clause = "parent_id is null")
     @JsonIgnore
-    private List<QuestionComment> questionComments = new ArrayList<>();
+    private List<QuestionComment> questionComments;
 
     @OneToMany(mappedBy = "question")
     @Builder.Default
@@ -74,23 +77,10 @@ public class Question extends BaseTimeEntity {
         this.views = views;
     }
 
-//    public Question(QuestionRequestDTO requestDto) {
-//        this.title = requestDto.getTitle();
-//        this.writer = member.getNickname();
-//        this.content = requestDto.getContent();
-//    }
-
     public Question(QuestionRequestDTO requestDto) {
         this.title = requestDto.getTitle();
         this.writer = requestDto.getWriter();
         this.content = requestDto.getContent();
-    }
-
-    public Question(QuestionRequestDTO requestDto, Member member) {
-        this.title = requestDto.getTitle();
-        this.writer = member.getNickname();
-        this.content = requestDto.getContent();
-        this.member = member;
     }
 
     /* 비즈니스 로직 */

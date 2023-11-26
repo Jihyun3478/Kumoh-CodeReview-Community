@@ -1,7 +1,6 @@
 package com.kcr.domain.dto.codequestion;
 
 import com.kcr.domain.entity.CodeQuestion;
-import com.kcr.domain.entity.Question;
 import lombok.Builder;
 import lombok.Getter;
 

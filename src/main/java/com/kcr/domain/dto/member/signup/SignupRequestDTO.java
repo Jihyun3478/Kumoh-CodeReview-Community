@@ -1,5 +1,6 @@
 package com.kcr.domain.dto.member.signup;
 
+import com.kcr.domain.entity.Salt;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,7 +29,9 @@ public class SignupRequestDTO {
     @NotBlank
     private String stuNum;
 
-    private boolean admin = false;      // 디폴트 값은 false. 관리자 권한일 경우 true 로 변한다
+    private Salt salt;
 
-    private String adminToken = "";
+//    private boolean admin = false;      // 디폴트 값은 false. 관리자 권한일 경우 true 로 변한다
+//
+//    private String adminToken = "";
 }

@@ -2,72 +2,96 @@ package com.kcr.controller;
 
 import com.kcr.domain.dto.codequestioncomment.CodeQuestionCommentRequestDTO;
 import com.kcr.domain.dto.codequestioncomment.CodeQuestionCommentResponseDTO;
+import com.kcr.domain.dto.member.MsgResponseDTO;
+import com.kcr.domain.entity.CodeQuestionComment;
+import com.kcr.domain.entity.Member;
+import com.kcr.domain.type.RoleType;
+import com.kcr.repository.CodeQuestionCommentRepository;
+import com.kcr.repository.MemberRepository;
 import com.kcr.service.CodeQuestionCommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 public class CodeQuestionCommentController {
-    @Autowired
+
     private CodeQuestionCommentService codeQuestionCommentService;
+    private final MemberRepository memberRepository;
+    private final CodeQuestionCommentRepository codeQuestionCommentRepository;
+
     //댓글 수정 , 부분수정이여서 PatchMapping 으로 바꿈
-    @PatchMapping("/codequestion/{codequestionid}/comments/{id}")
+    @PatchMapping("/codequestion/{codequestionid}/codecomment/{id}")
     public ResponseEntity<Long> update(@PathVariable Long codequestionid,
                                        @PathVariable Long id,
-                                       @RequestBody CodeQuestionCommentRequestDTO requestDTO) {
+                                       @RequestBody CodeQuestionCommentRequestDTO requestDTO, HttpSession session) {
+        Member loginMember = (Member)session.getAttribute("loginMember");
+
+        Member loginNickname = memberRepository.findByNickname(loginMember.getNickname());
+        if(!Objects.equals(requestDTO.getWriter(), loginNickname.getNickname())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
         codeQuestionCommentService.updateComment(codequestionid, id, requestDTO);
-        return ResponseEntity.ok(id);
+        return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
     // 댓글 삭제
-    @DeleteMapping("/codequestion/{codequestionid}/comments/{id}/delete")
-    public void delete(@PathVariable("id") Long id) {
-        codeQuestionCommentService.delete(id);
+    @DeleteMapping("/codequestion/{codequestionid}/codecomment/{id}/delete")
+    public ResponseEntity<MsgResponseDTO> delete(@PathVariable("id") Long id, HttpSession session) {
+        Member loginMember = (Member)session.getAttribute("loginMember");
+
+        Member loginNickname = memberRepository.findByNickname(loginMember.getNickname());
+        CodeQuestionComment codeQuestionComment = codeQuestionCommentRepository.findById(id).orElseThrow(() -> {
+            return new IllegalArgumentException("해당 게시글이 존재하지 않습니다.");
+        });
+
+        if(!Objects.equals(codeQuestionComment.getWriter(), loginNickname.getNickname())) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(codeQuestionCommentService.delete(id), HttpStatus.OK);
     }
 
 
-    //댓글등록(일반 댓글과 코드 관련댓글 공백일시 예외처리)
+    //댓글등록
     @PostMapping("/codequestion/{id}/codecomment")
-    public ResponseEntity<String> commentSave(@PathVariable Long id, @RequestBody CodeQuestionCommentRequestDTO codeQuestionCommentRequestDTO) {
+    public ResponseEntity<CodeQuestionCommentResponseDTO> commentSave(@PathVariable Long id, @RequestBody CodeQuestionCommentRequestDTO codeQuestionCommentRequestDTO, HttpSession session) {
+        Member loginMember = (Member)session.getAttribute("loginMember");
 
-        System.out.println("====================start====================================");
-        try {
-            Long commentId = codeQuestionCommentService.commentSave(id, codeQuestionCommentRequestDTO);
-            System.out.println("commentID :"+commentId);
-            String commentIDtoString = String.valueOf(commentId);
-
-            System.out.println("commentIDtoString :"+commentIDtoString);
-            return ResponseEntity.ok().body(commentIDtoString);
-        } catch (IllegalArgumentException e) {
-            System.out.println("error :");
-            return ResponseEntity.badRequest().body(e.getMessage());
+        RoleType roleType = memberRepository.findByLoginId(loginMember.getLoginId()).getRoleType();
+        if(!validateMemberRole(roleType)) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
+
+        codeQuestionCommentRequestDTO.setWriter(loginMember.getNickname());
+        return new ResponseEntity<>(codeQuestionCommentService.commentSave(id, codeQuestionCommentRequestDTO), HttpStatus.OK);
     }
+
     //대댓글 등록
-    @PostMapping("/codequestion/{id}/comment/{parentId}/child")
-    public ResponseEntity<String> createChildComment(@PathVariable Long parentId,@PathVariable Long id,
-                                                   @RequestBody CodeQuestionCommentRequestDTO requestDTO) {
-        try {
-            Long childCommentId = codeQuestionCommentService.saveChildComment(parentId, id, requestDTO);
-            String childCommentIDtoString = String.valueOf(childCommentId);
-            return ResponseEntity.ok().body(childCommentIDtoString);
-        }catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @PostMapping("/codequestion/{id}/codecomment/{parentId}/child")
+    public ResponseEntity<CodeQuestionCommentResponseDTO> createChildComment(@PathVariable Long parentId, @PathVariable Long id,
+                                                                         @RequestBody CodeQuestionCommentRequestDTO requestDTO, HttpSession session) {
+        Member loginMember = (Member)session.getAttribute("loginMember");
+        requestDTO.setWriter(loginMember.getNickname());
+
+        return new ResponseEntity<>(codeQuestionCommentService.saveChildComment(parentId, id, requestDTO), HttpStatus.OK);
     }
 
 
     // 대댓글만 조회(테스트용)
-    @GetMapping("/codequestion/{id}/comment/{commentId}/children")
+    @GetMapping("/codequestion/{id}/codecomment/{commentId}/children")
     public ResponseEntity<List<CodeQuestionCommentResponseDTO>> getChildComments(@PathVariable Long commentId) {
         List<CodeQuestionCommentResponseDTO> childComments = codeQuestionCommentService.findAllChildComments(commentId);
-        return ResponseEntity.ok(childComments);
+        return new ResponseEntity<>(childComments, HttpStatus.OK);
     }
 
+    private boolean validateMemberRole(RoleType roleType) {
+        return (roleType == RoleType.USER) || (roleType == RoleType.ADMIN);
+    }
 }

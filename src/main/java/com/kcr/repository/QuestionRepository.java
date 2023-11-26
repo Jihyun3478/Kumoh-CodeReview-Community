@@ -14,7 +14,6 @@ import java.util.Optional;
 public interface QuestionRepository extends JpaRepository<Question, Long> {
 
     Page<Question> findAll(Pageable pageable);
-    Optional<Question> findByIdAndMemberId(Long questionId, Long memberId);
     Page<QuestionListResponseDTO> findTop5ByOrderByCreateDateDesc(Pageable pageable);
 
     Page<QuestionListResponseDTO> findByTitleContaining(String title, Pageable pageable);

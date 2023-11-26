@@ -1,6 +1,8 @@
 package com.kcr.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kcr.domain.dto.codequestioncomment.CodeQuestionCommentRequestDTO;
+import com.kcr.domain.dto.questioncomment.QuestionCommentRequestDTO;
 import lombok.*;
 
 import javax.persistence.*;
@@ -53,6 +55,12 @@ public class CodeQuestionComment extends BaseTimeEntity{
     @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<CodeQuestionComment> child = new ArrayList<>();
 
+    @OneToOne(mappedBy = "codeQuestionComment")
+    private Member member;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "MEMBER_ID")
+//    private Member member;
+
     public CodeQuestionComment(String content, String codeContent,Long totalLikes, String writer, CodeQuestion codeQuestion_id){
         this.content = content;
         this.codeContent = codeContent;
@@ -61,8 +69,17 @@ public class CodeQuestionComment extends BaseTimeEntity{
         this.codeQuestion=codeQuestion_id;
     }
 
-    public void updateCodeQuestionComment(String content) {
+    public CodeQuestionComment(CodeQuestionCommentRequestDTO codeQuestionCommentRequestDTO){
+        this.content = codeQuestionCommentRequestDTO.getContent();
+        this.codeContent = codeQuestionCommentRequestDTO.getCodeContent();
+        this.totalLikes = codeQuestionCommentRequestDTO.getTotalLikes();
+        this.writer = codeQuestionCommentRequestDTO.getWriter();
+        this.codeQuestion=codeQuestionCommentRequestDTO.getCodeQuestion();
+    }
+
+    public void updateCodeQuestionComment(String content, String codeContent) {
         this.content = content;
+        this.codeContent = codeContent;
     }
 
     public void updateParent(CodeQuestionComment codeQuestionComment) {

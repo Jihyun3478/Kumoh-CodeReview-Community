@@ -1,13 +1,14 @@
 package com.kcr.domain.dto.codequestion;
 
 import com.kcr.domain.entity.CodeQuestion;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /* 게시글의 등록과 수정을 처리할 요청 클래스 */
 @Getter
+@Setter
 @NoArgsConstructor // (access = AccessLevel.PROTECTED)
 public class CodeQuestionRequestDTO {
     private String title;
@@ -34,7 +35,6 @@ public class CodeQuestionRequestDTO {
                 .writer(writer)
                 .content(content)
                 .codeContent(codeContent)
-//                    .member(member)
                 .build();
     }
 }

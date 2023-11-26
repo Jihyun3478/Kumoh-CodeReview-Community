@@ -5,8 +5,7 @@ import com.kcr.domain.entity.CodeQuestion;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
 
 /* 게시글 정보를 리턴할 응답 클래스 */
 /* Entity 클래스를 생성자 파라미터로 받아 데이터를 DTO로 변환하여 응답 */
@@ -22,7 +21,7 @@ public class CodeQuestionResponseDTO {
     private final String createDate;
     private final Long totalLikes;
     private final Long views;
-    private  List<CodeQuestionCommentResponseDTO> codeQuestionComment;
+    private Page<CodeQuestionCommentResponseDTO> codeQuestionComment;
 //    List<CodeQuestionCommentResponseDTO> codQuestionComments;
 //        private final Long memberId;
 

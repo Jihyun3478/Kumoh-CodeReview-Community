@@ -2,14 +2,11 @@ package com.kcr.domain.dto.question;
 
 import com.kcr.domain.dto.chatGPT.ChatGptResponse;
 import com.kcr.domain.dto.questioncomment.QuestionCommentResponseDTO;
-import com.kcr.domain.entity.Member;
 import com.kcr.domain.entity.Question;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import org.springframework.data.domain.Page;
 
 /* 게시글 정보를 리턴할 응답 클래스 */
 /* Entity 클래스를 생성자 파라미터로 받아 데이터를 DTO로 변환하여 응답 */
@@ -24,7 +21,7 @@ public class QuestionResponseDTO {
     private final String createDate;
     private final Long totalLikes;
     private final Long views;
-    private List<QuestionCommentResponseDTO> questionComments;
+    private Page<QuestionCommentResponseDTO> questionComments;
     private ChatGptResponse chatGPT;
 //        private final Long memberId;
 
@@ -49,8 +46,6 @@ public class QuestionResponseDTO {
         this.createDate = question.getCreateDate();
         this.totalLikes = question.getTotalLikes();
         this.views = question.getViews();
-        this.questionComments= question.getQuestionComments().stream().map(QuestionCommentResponseDTO::new).collect(Collectors.toList());
-        // this.chatGPT=question.getChatGPT().;
 //            this.memberId = question.getMember().getId();
     }
 }

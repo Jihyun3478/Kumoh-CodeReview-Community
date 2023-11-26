@@ -1,8 +1,10 @@
 package com.kcr.domain.dto.question;
 
 import com.kcr.domain.entity.Question;
-import com.kcr.domain.entity.Member;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /* 게시글의 등록과 수정을 처리할 요청 클래스 */
 @Getter
@@ -27,7 +29,6 @@ public class QuestionRequestDTO {
         return Question.builder()
                 .title(title)
                 .writer(writer)
-//                .writer(writer)
                 .content(content)
                 .build();
     }

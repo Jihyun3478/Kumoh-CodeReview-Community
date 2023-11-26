@@ -1,58 +1,85 @@
 package com.kcr.service;
 
-import com.kcr.domain.dto.report.ReportRequestDTO;
-import com.kcr.domain.dto.report.ReportResponseDTO;
+import com.kcr.domain.dto.report.PostReportRequestDTO;
+import com.kcr.domain.dto.report.WriterReportRequestDTO;
 import com.kcr.domain.entity.Report;
 import com.kcr.domain.type.ReportType;
 import com.kcr.repository.ReportRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Service
+@RequiredArgsConstructor
 public class ReportService {
 
-    @Autowired
-    private ReportRepository reportRepository;
-    //작성자 신고등록
+    private final ReportRepository reportRepository;
+
+
+    // 작성자 신고
     @Transactional
-    public Long saveWriterReport(ReportRequestDTO reportRequestDTO) {
-        Report report = reportRequestDTO.toSaveEntity();
-        report.setReportType(ReportType.WRITER_REPORT);
+    public Long saveWriterReport(WriterReportRequestDTO requestDTO) {
+        String writer = requestDTO.getWriter();
+        String title = requestDTO.getTitle();
+        String content = requestDTO.getContent();
+        Report report = new Report(writer, title, content, ReportType.WRITER_REPORT);
         reportRepository.save(report);
-        return reportRequestDTO.getId();
+
+        return report.getId();
     }
 
-    //댓글 신고등록
+    // Q&A 게시글 신고
     @Transactional
-    public Long saveCommentReport(ReportRequestDTO reportRequestDTO) {
-        Report report = reportRequestDTO.toSaveEntity();
-        report.setReportType(ReportType.COMMENT_REPORT);
+    public Long saveQuestionReport(PostReportRequestDTO requestDTO) {
+        Long postId = requestDTO.getPostId();
+        String title = requestDTO.getTitle();
+        String content = requestDTO.getContent();
+        Report report = new Report(postId, title, content, ReportType.QUESTION_REPORT);
         reportRepository.save(report);
-        return reportRequestDTO.getId();
+
+        return report.getId();
     }
 
-    //게시글 신고등록
+    // Q&A 게시글 댓글 신고
     @Transactional
-    public Long savePostReport(ReportRequestDTO reportRequestDTO) {
-
-        Report report = reportRequestDTO.toSaveEntity();
-        report.setReportType(ReportType.POST_REPORT);
+    public Long saveQuestionCommentReport(PostReportRequestDTO requestDTO) {
+        Long postId = requestDTO.getPostId();
+        String title = requestDTO.getTitle();
+        String content = requestDTO.getContent();
+        Report report = new Report(postId, title, content, ReportType.QUESTION_COMMENT_REPORT);
         reportRepository.save(report);
-        return reportRequestDTO.getId();
+
+        return report.getId();
+    }
+
+    // 코드리뷰 게시글 신고
+    @Transactional
+    public Long saveCodequestionReport(PostReportRequestDTO requestDTO) {
+        Long postId = requestDTO.getPostId();
+        String title = requestDTO.getTitle();
+        String content = requestDTO.getContent();
+        Report report = new Report(postId, title, content, ReportType.CODE_QUESTION_REPORT);
+        reportRepository.save(report);
+
+        return report.getId();
+    }
+
+    // 코드리뷰 게시글 댓글 신고
+    @Transactional
+    public Long saveCodequestionCommentReport(PostReportRequestDTO requestDTO) {
+        Long postId = requestDTO.getPostId();
+        String title = requestDTO.getTitle();
+        String content = requestDTO.getContent();
+        Report report = new Report(postId, title, content, ReportType.CODE_QUESTION_COMMENT_REPORT);
+        reportRepository.save(report);
+
+        return report.getId();
     }
 
     //관리자용 신고조회(신고목록조회)
-    public List<ReportResponseDTO> findAllReport() {
-        List<Report> reports = reportRepository.findAll();
-        List<ReportResponseDTO> reportList = reports.stream()
-                .map(ReportResponseDTO::toReportDTO)
-                .collect(Collectors.toList());
-
-        return reportList;
-
+    public Page<Report> findAllReport(Pageable pageable) {
+        return reportRepository.findAll(pageable);
     }
 }

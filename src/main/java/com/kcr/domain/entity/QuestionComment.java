@@ -1,6 +1,7 @@
 package com.kcr.domain.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kcr.domain.dto.questioncomment.QuestionCommentRequestDTO;
 import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
@@ -12,7 +13,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Setter
 @Table(name = "questioncomment")
-@NoArgsConstructor(access = AccessLevel.PROTECTED) // 기본 생성자의 접근 제어를 Protected로 설정함으로써 무분별한 객체 생성을 예방함
+@NoArgsConstructor//(access = AccessLevel.PROTECTED) // 기본 생성자의 접근 제어를 Protected로 설정함으로써 무분별한 객체 생성을 예방함
 @AllArgsConstructor
 @Builder
 public class QuestionComment extends BaseTimeEntity{
@@ -47,11 +48,24 @@ public class QuestionComment extends BaseTimeEntity{
     @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionComment> child = new ArrayList<>();
 
+    @OneToOne(mappedBy = "questionComment")
+    private Member member;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "MEMBER_ID")
+//    private Member member;
+
     public QuestionComment(String content,Long totalLikes, String writer, Question question_id){
         this.content = content;
         this.totalLikes = totalLikes;
         this.writer = writer;
         this.question=question_id;
+    }
+
+    public QuestionComment(QuestionCommentRequestDTO questionCommentRequestDTO){
+        this.content = questionCommentRequestDTO.getContent();
+        this.totalLikes = questionCommentRequestDTO.getTotalLikes();
+        this.writer = questionCommentRequestDTO.getWriter();
+        this.question=questionCommentRequestDTO.getQuestion();
     }
 
     public void updateParent(QuestionComment parent) {

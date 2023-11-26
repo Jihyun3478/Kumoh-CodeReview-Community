@@ -1,11 +1,8 @@
 package com.kcr.domain.dto.question;
 
-import com.kcr.domain.entity.Likes;
 import com.kcr.domain.entity.Question;
 import lombok.Builder;
 import lombok.Getter;
-
-import java.util.List;
 
 /* 게시글 정보를 리턴할 응답 클래스 */
 /* Entity 클래스를 생성자 파라미터로 받아 데이터를 DTO로 변환하여 응답 */

@@ -1,5 +1,6 @@
 package com.kcr.service;
 
+import com.kcr.domain.dto.member.MsgResponseDTO;
 import com.kcr.domain.dto.questioncomment.QuestionCommentRequestDTO;
 import com.kcr.domain.dto.questioncomment.QuestionCommentResponseDTO;
 import com.kcr.domain.entity.Question;
@@ -8,6 +9,8 @@ import com.kcr.repository.QuestionCommentRepository;
 import com.kcr.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +29,9 @@ public class QuestionCommentService implements CommentService {
 
     //댓글삭제
     @Override
-    public void delete(Long id) {
+    public MsgResponseDTO delete(Long id) {
         questionCommentRepository.deleteById(id);
+        return new MsgResponseDTO("게시글 삭제 완료", 200);
     }
 
     public QuestionComment view(Long id) {
@@ -71,15 +75,15 @@ public class QuestionCommentService implements CommentService {
     }
 
     @Transactional
-    public Long commentSave(Long id, QuestionCommentRequestDTO questionCommentRequestDTO) {
+    public QuestionCommentResponseDTO commentSave(Long id, QuestionCommentRequestDTO questionCommentRequestDTO) {
         Question question = questionRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("댓글 쓰기 실패: 해당 게시글이 존재하지 않습니다." + id));
 
         questionCommentRequestDTO.setQuestion(question);
-        QuestionComment questionComment = questionCommentRequestDTO.toSaveEntity();
-       // questionComment.updateParent(questionComment);
-        questionCommentRepository.save(questionComment);
-        return questionCommentRequestDTO.getId();
+        QuestionComment questionComment = new QuestionComment(questionCommentRequestDTO);
+        QuestionComment savedQuestionComment = questionCommentRepository.save(questionComment);
+
+        return new QuestionCommentResponseDTO(savedQuestionComment);
     }
 
     public List<QuestionCommentResponseDTO> findAllChildComments(Long commentId) {
@@ -88,24 +92,13 @@ public class QuestionCommentService implements CommentService {
                 .collect(Collectors.toList());
     }
 
-    public List<QuestionCommentResponseDTO> findAllWithChild2(Long questionId, int page) {
-        int size = 5; // 페이지당 댓글 수
-        int limit = size;
-        int offset = (page - 1) * size;
+    public Page<QuestionCommentResponseDTO> findAllWithChild2(Long questionId, Pageable pageable) {
+        Page<QuestionComment> commentsPage = questionCommentRepository.findByQuestionIdWithPagination(questionId, pageable);
 
-        List<QuestionComment> comments = questionCommentRepository.findAllWithRepliesByQuestionId2(questionId, limit, offset);
-
-        List<QuestionCommentResponseDTO> questionCommentDTOList = new ArrayList<>();
-        for (QuestionComment questionComment : comments) {
-            QuestionCommentResponseDTO dto = QuestionCommentResponseDTO.toCommentDTO(questionComment);
-            questionCommentDTOList.add(dto);
-        }
-
-        return questionCommentDTOList;
+        return commentsPage.map(QuestionCommentResponseDTO::toCommentDTO);
     }
-
     @Transactional
-    public Long saveChildComment(Long parentId, Long questionID, QuestionCommentRequestDTO requestDTO) {
+    public QuestionCommentResponseDTO saveChildComment(Long parentId, Long questionID, QuestionCommentRequestDTO requestDTO) {
         String content = requestDTO.getContent();
         if (content == null || content.trim().isEmpty()) {
             throw new IllegalArgumentException("대댓글 내용이 비어있습니다.");
@@ -115,11 +108,10 @@ public class QuestionCommentService implements CommentService {
         Question question = questionRepository.findById(questionID)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다: " +questionID));
         requestDTO.setQuestion(question);
-//        requestDTO.setParentComment(parent);
-       QuestionComment child = requestDTO.toSaveEntity();
+        QuestionComment questionComment = new QuestionComment(requestDTO);
+        QuestionComment child = questionCommentRepository.save(questionComment);
         child.updateParent(parent); // 대댓글에 부모 댓글 설정
-        //  parent.setChild((List<QuestionComment>) child);
         questionCommentRepository.save(child); //DB에 저장
-        return child.getId();
+        return new QuestionCommentResponseDTO(child);
     }
 }

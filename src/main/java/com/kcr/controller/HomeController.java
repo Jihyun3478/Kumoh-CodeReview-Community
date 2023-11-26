@@ -1,6 +1,5 @@
 package com.kcr.controller;
 
-import com.kcr.domain.dto.codequestion.CodeQuestionListResponseDTO;
 import com.kcr.domain.dto.question.QuestionListResponseDTO;
 import com.kcr.repository.CodeQuestionRepository;
 import com.kcr.repository.QuestionRepository;
