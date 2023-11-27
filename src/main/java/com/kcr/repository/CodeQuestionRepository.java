@@ -14,7 +14,6 @@ import java.util.Optional;
 public interface CodeQuestionRepository extends JpaRepository<CodeQuestion, Long> {
 
     Page<CodeQuestion> findAll(Pageable pageable);
-    Optional<CodeQuestion> findByIdAndMemberId(Long questionId, Long memberId);
     Page<CodeQuestionListResponseDTO> findTop5ByOrderByCreateDateDesc(Pageable pageable);
 
     Page<CodeQuestionListResponseDTO> findByTitleContaining(String title, Pageable pageable);

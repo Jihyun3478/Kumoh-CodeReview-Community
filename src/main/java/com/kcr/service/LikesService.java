@@ -4,6 +4,7 @@ import com.kcr.domain.dto.likes.LikesRequestDTO;
 import com.kcr.domain.dto.likes.LikesResponseDTO;
 import com.kcr.domain.entity.*;
 import com.kcr.repository.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,17 +12,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class LikesService {
-    @Autowired
-    private LikesRepository likesRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
-    @Autowired
-    private CodeQuestionRepository codeQuestionRepository;
-    @Autowired
-    private QuestionCommentRepository questionCommentRepository;
-    @Autowired
-    private CodeQuestionCommentRepository codeQuestionCommentRepository;
+
+    private final LikesRepository likesRepository;
+    private final QuestionRepository questionRepository;
+    private final CodeQuestionRepository codeQuestionRepository;
+    private final QuestionCommentRepository questionCommentRepository;
+    private final CodeQuestionCommentRepository codeQuestionCommentRepository;
 
 
     //q&a게시글 공감

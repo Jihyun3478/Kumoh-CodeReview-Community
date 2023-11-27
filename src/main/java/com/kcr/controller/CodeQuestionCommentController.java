@@ -23,22 +23,28 @@ import java.util.Objects;
 @CrossOrigin(origins = "http://localhost:3000")
 public class CodeQuestionCommentController {
 
-    private CodeQuestionCommentService codeQuestionCommentService;
+    private final CodeQuestionCommentService codeQuestionCommentService;
     private final MemberRepository memberRepository;
     private final CodeQuestionCommentRepository codeQuestionCommentRepository;
 
-    //댓글 수정 , 부분수정이여서 PatchMapping 으로 바꿈
     @PatchMapping("/codequestion/{codequestionid}/codecomment/{id}")
-    public ResponseEntity<Long> update(@PathVariable Long codequestionid,
+    public ResponseEntity<Long> update(@PathVariable Long questionId,
                                        @PathVariable Long id,
                                        @RequestBody CodeQuestionCommentRequestDTO requestDTO, HttpSession session) {
-        Member loginMember = (Member)session.getAttribute("loginMember");
+        Member loginMember = (Member) session.getAttribute("loginMember");
 
         Member loginNickname = memberRepository.findByNickname(loginMember.getNickname());
-        if(!Objects.equals(requestDTO.getWriter(), loginNickname.getNickname())) {
+        String writer = codeQuestionCommentRepository.findById(id).get().getWriter();
+
+        System.out.println("loginNickname = " + loginNickname.getNickname());
+        try {
+            if (!Objects.equals(writer, loginNickname.getNickname())) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        codeQuestionCommentService.updateComment(codequestionid, id, requestDTO);
+        codeQuestionCommentService.updateComment(questionId, id, requestDTO);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
 
@@ -52,7 +58,11 @@ public class CodeQuestionCommentController {
             return new IllegalArgumentException("해당 게시글이 존재하지 않습니다.");
         });
 
-        if(!Objects.equals(codeQuestionComment.getWriter(), loginNickname.getNickname())) {
+        try {
+            if (!Objects.equals(codeQuestionComment.getWriter(), loginNickname.getNickname())) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(codeQuestionCommentService.delete(id), HttpStatus.OK);
@@ -65,7 +75,11 @@ public class CodeQuestionCommentController {
         Member loginMember = (Member)session.getAttribute("loginMember");
 
         RoleType roleType = memberRepository.findByLoginId(loginMember.getLoginId()).getRoleType();
-        if(!validateMemberRole(roleType)) {
+        try {
+            if(!validateMemberRole(roleType)) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 

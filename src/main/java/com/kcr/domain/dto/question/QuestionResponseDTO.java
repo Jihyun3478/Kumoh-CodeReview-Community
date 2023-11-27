@@ -23,7 +23,7 @@ public class QuestionResponseDTO {
     private final Long views;
     private Page<QuestionCommentResponseDTO> questionComments;
     private ChatGptResponse chatGPT;
-//        private final Long memberId;
+    private Long totalComments;
 
     /* Entity -> DTO */
     @Builder

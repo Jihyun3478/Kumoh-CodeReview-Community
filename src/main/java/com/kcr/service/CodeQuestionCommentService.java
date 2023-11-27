@@ -8,7 +8,6 @@ import com.kcr.domain.entity.CodeQuestionComment;
 import com.kcr.repository.CodeQuestionCommentRepository;
 import com.kcr.repository.CodeQuestionRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -21,10 +20,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CodeQuestionCommentService implements CommentService{
 
-    @Autowired
-    private CodeQuestionCommentRepository codeQuestionCommentRepository;
-    @Autowired
-    private CodeQuestionRepository codeQuestionRepository;
+    private final CodeQuestionCommentRepository codeQuestionCommentRepository;
+    private final CodeQuestionRepository codeQuestionRepository;
 
     //댓글 등록
     @Transactional

@@ -22,8 +22,8 @@ public class CodeQuestionResponseDTO {
     private final Long totalLikes;
     private final Long views;
     private Page<CodeQuestionCommentResponseDTO> codeQuestionComment;
-//    List<CodeQuestionCommentResponseDTO> codQuestionComments;
-//        private final Long memberId;
+    private Long totalComments;
+
 
     /* Entity -> DTO */
     @Builder
@@ -47,7 +47,5 @@ public class CodeQuestionResponseDTO {
         this.createDate = codeQuestion.getCreateDate();
         this.totalLikes = codeQuestion.getTotalLikes();
         this.views = codeQuestion.getViews();
-//        this.codQuestionComments = codeQuestion.getCodeQuestionComments().stream().map(CodeQuestionCommentResponseDTO::new).collect(Collectors.toList());
-//            this.memberId = question.getMember().getId();
     }
 }

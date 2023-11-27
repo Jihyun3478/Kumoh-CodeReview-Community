@@ -3,19 +3,16 @@ package com.kcr.domain.dto.codequestion;
 import com.kcr.domain.entity.CodeQuestion;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /* 게시글의 등록과 수정을 처리할 요청 클래스 */
 @Getter
-@Setter
-@NoArgsConstructor // (access = AccessLevel.PROTECTED)
+@Setter // (access = AccessLevel.PROTECTED)
 public class CodeQuestionRequestDTO {
     private String title;
     private String writer;
     private String content;
     private String codeContent;
-//        private Member member;
 
     /* 게시글 등록 */
     @Builder
@@ -24,7 +21,6 @@ public class CodeQuestionRequestDTO {
         this.writer = writer;
         this.content = content;
         this.codeContent = codeContent;
-//            this.member = member;
     }
 
     /* DTO -> Entity */

@@ -15,7 +15,6 @@ public class QuestionListResponseDTO {
     private final String createDate;
     private final Long totalLikes;
     private final Long views;
-//        private final Long memberId;
 
     /* Entity -> DTO */
     @Builder
@@ -35,6 +34,5 @@ public class QuestionListResponseDTO {
         this.createDate = question.getCreateDate();
         this.totalLikes = question.getTotalLikes();
         this.views = question.getViews();
-//            this.memberId = question.getMember().getId();
     }
 }

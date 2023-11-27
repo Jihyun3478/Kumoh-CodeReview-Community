@@ -8,12 +8,6 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class RestConfig {
-    /* @Bean
-     public RestTemplate restTemplate() {
-         RestTemplate restTemplate = new RestTemplate();
-         restTemplate.getMessageConverters().add(new StringHttpMessageConverter());
-         return restTemplate;
-     }*/
     @Bean
     public RestTemplate restTemplate(ObjectMapper objectMapper) {
         RestTemplate restTemplate = new RestTemplate();

@@ -22,7 +22,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api")
+@CrossOrigin(origins = "http://localhost:3000")
 public class MemberController {
 
     private final AuthServiceImpl authServiceImpl;
@@ -30,14 +30,24 @@ public class MemberController {
 
     /* ================ API ================ */
     /* 회원가입 */
-    @PostMapping("/signup")
-    public ResponseEntity<MsgResponseDTO> signup(@RequestBody @Valid Member member) {
-        authServiceImpl.signup(member);
-        return ResponseEntity.ok(new MsgResponseDTO("회원가입 완료", HttpStatus.OK.value()));
+    @PostMapping("/api/signup")
+    public ResponseEntity<MsgResponseDTO> signup(@RequestBody @Valid Member loginMember, BindingResult bindingResult) {
+        if(loginMember == null) {
+            return ResponseEntity.ok(new MsgResponseDTO("회원가입 완료", HttpStatus.OK.value()));
+        }
+        authServiceImpl.signup(loginMember);
+
+        try {
+            Member member = authServiceImpl.findByLoginId(loginMember.getLoginId() + "@kumoh.ac.kr");
+            authServiceImpl.sendVerificationMail(member);
+            return ResponseEntity.ok(new MsgResponseDTO("인증 메일 전송 완료", HttpStatus.OK.value()));
+        } catch (Exception exception) {
+            return ResponseEntity.ok(new MsgResponseDTO("인증 메일 전송 실패", HttpStatus.BAD_REQUEST.value()));
+        }
     }
 
     /* 로그인 */
-    @PostMapping("/signin")
+    @PostMapping("/api/signin")
     public ResponseEntity<MsgResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDto, BindingResult bindingResult, HttpServletRequest request) {
         Member loginMember = authServiceImpl.login(loginRequestDto.getLoginId(), loginRequestDto.getLoginPw());
 
@@ -48,13 +58,14 @@ public class MemberController {
         //로그인 성공 처리
         //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
         HttpSession session = request.getSession();
+        System.out.println(session.getId());
 
         //세션에 로그인 회원 정보 보관
         session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
         return ResponseEntity.ok(new MsgResponseDTO("로그인 완료", HttpStatus.OK.value()));
     }
 
-    @PostMapping("/signout")
+    @PostMapping("/api/signout")
     public String logout(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
         if (session != null) {
@@ -64,20 +75,22 @@ public class MemberController {
     }
 
     /* 인증 메일 전송 */
-    @PostMapping("/signup/verify")
-    public ResponseEntity<MsgResponseDTO> verify(@RequestBody MailRequestDTO emailDTO, HttpServletRequest req, HttpServletResponse res) {
-        try {
-            Member member = authServiceImpl.findByLoginId(emailDTO.getLoginId());
-            authServiceImpl.sendVerificationMail(member);
-            return ResponseEntity.ok(new MsgResponseDTO("인증 메일 전송 완료", HttpStatus.OK.value()));
-        } catch (Exception exception) {
-            return ResponseEntity.ok(new MsgResponseDTO("인증 메일 전송 실패", HttpStatus.BAD_REQUEST.value()));
-        }
-    }
+//    @PostMapping("/api/signup/verify")
+//    public ResponseEntity<MsgResponseDTO> verify(MailRequestDTO requestDTO) { // , HttpServletRequest req, HttpServletResponse res
+//        try {
+//            Member member = authServiceImpl.findByLoginId(requestDTO.getLoginId());
+//            System.out.println("1");
+//            authServiceImpl.sendVerificationMail(member);
+//            System.out.println("1");
+//            return ResponseEntity.ok(new MsgResponseDTO("인증 메일 전송 완료", HttpStatus.OK.value()));
+//        } catch (Exception exception) {
+//            return ResponseEntity.ok(new MsgResponseDTO("인증 메일 전송 실패", HttpStatus.BAD_REQUEST.value()));
+//        }
+//    }
 
     @PostConstruct
     public void init() {
-        memberRepository.save(new Member("hyun3478@kumoh.ac.kr", "hyun347800", RoleType.ADMIN, "이지현", "20200930"));
+        memberRepository.save(new Member("a1234@kumoh.ac.kr", "a1234", RoleType.USER, "사용자1", "20200930"));
     }
 
     /* ================ UI ================ */
@@ -90,7 +103,6 @@ public class MemberController {
 
         } catch (Exception e) {
             return ResponseEntity.ok(new MsgResponseDTO("인증메일을 확인하는데 실패했습니다.", HttpStatus.BAD_REQUEST.value()));
-
         }
     }
 }

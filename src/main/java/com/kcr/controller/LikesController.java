@@ -4,7 +4,6 @@ import com.kcr.domain.dto.likes.LikesRequestDTO;
 import com.kcr.domain.dto.likes.LikesResponseDTO;
 import com.kcr.service.LikesService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +13,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 public class LikesController {
-    @Autowired
-    private LikesService likesService;
+    private final LikesService likesService;
 
     //좋아요 전체 출력(q&a)
     @GetMapping("/question/{id}/likes")

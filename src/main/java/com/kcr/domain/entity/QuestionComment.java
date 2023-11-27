@@ -13,7 +13,7 @@ import static javax.persistence.FetchType.LAZY;
 @Getter
 @Setter
 @Table(name = "questioncomment")
-@NoArgsConstructor//(access = AccessLevel.PROTECTED) // 기본 생성자의 접근 제어를 Protected로 설정함으로써 무분별한 객체 생성을 예방함
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
 public class QuestionComment extends BaseTimeEntity{
@@ -45,7 +45,7 @@ public class QuestionComment extends BaseTimeEntity{
     private QuestionComment parent;
 
     @Builder.Default
-    @OneToMany(mappedBy = "parent", fetch = FetchType.EAGER,cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
     private List<QuestionComment> child = new ArrayList<>();
 
     @OneToOne(mappedBy = "questionComment")

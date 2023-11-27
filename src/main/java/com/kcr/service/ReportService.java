@@ -17,7 +17,6 @@ public class ReportService {
 
     private final ReportRepository reportRepository;
 
-
     // 작성자 신고
     @Transactional
     public Long saveWriterReport(WriterReportRequestDTO requestDTO) {
@@ -44,11 +43,11 @@ public class ReportService {
 
     // Q&A 게시글 댓글 신고
     @Transactional
-    public Long saveQuestionCommentReport(PostReportRequestDTO requestDTO) {
-        Long postId = requestDTO.getPostId();
+    public Long saveQuestionCommentReport(WriterReportRequestDTO requestDTO) {
+        String writer = requestDTO.getWriter();
         String title = requestDTO.getTitle();
         String content = requestDTO.getContent();
-        Report report = new Report(postId, title, content, ReportType.QUESTION_COMMENT_REPORT);
+        Report report = new Report(writer, title, content, ReportType.QUESTION_COMMENT_REPORT);
         reportRepository.save(report);
 
         return report.getId();
@@ -68,11 +67,11 @@ public class ReportService {
 
     // 코드리뷰 게시글 댓글 신고
     @Transactional
-    public Long saveCodequestionCommentReport(PostReportRequestDTO requestDTO) {
-        Long postId = requestDTO.getPostId();
+    public Long saveCodequestionCommentReport(WriterReportRequestDTO requestDTO) {
+        String writer = requestDTO.getWriter();
         String title = requestDTO.getTitle();
         String content = requestDTO.getContent();
-        Report report = new Report(postId, title, content, ReportType.CODE_QUESTION_COMMENT_REPORT);
+        Report report = new Report(writer, title, content, ReportType.CODE_QUESTION_COMMENT_REPORT);
         reportRepository.save(report);
 
         return report.getId();

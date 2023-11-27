@@ -14,7 +14,6 @@ import java.util.List;
 public interface LikesRepository extends JpaRepository<Likes, Long> {
     @Query("SELECT l FROM Likes l WHERE l.question.id = :questionId")
     List<Likes> findAllWithQuestion(@Param("questionId") Long questionId);
-    long countByQuestionId(Long questionId);
 
     @Transactional
     @Modifying

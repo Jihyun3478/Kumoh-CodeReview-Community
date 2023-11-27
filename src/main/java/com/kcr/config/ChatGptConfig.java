@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ChatGptConfig {
     public static final String AUTHORIZATION = "Authorization";
-    //  public static final String API_KEY ="myapiKey";
     public static final String BEARER = "Bearer ";
     public static final String CHAT_MODEL = "gpt-3.5-turbo";
     public static final Integer MAX_TOKEN = 800;

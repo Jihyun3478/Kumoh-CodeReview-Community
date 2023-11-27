@@ -50,7 +50,7 @@ public class CodeQuestion extends BaseTimeEntity {
     private Long views;
 
     /* 연관관계 */
-    @OneToOne(mappedBy = "questionComment")
+    @OneToOne(mappedBy = "codeQuestion")
     private Member member;
 //    @ManyToOne(fetch = FetchType.LAZY)
 //    @JoinColumn(name = "MEMBER_ID")

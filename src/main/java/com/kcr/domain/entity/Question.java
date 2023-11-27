@@ -49,10 +49,13 @@ public class Question extends BaseTimeEntity {
 //    @JoinColumn(name = "MEMBER_ID")
 //    private Member member;
 
+//    @OneToMany(mappedBy = "codeQuestion", cascade = CascadeType.ALL, orphanRemoval = true)
+//    @Where(clause = "parent_id is null")
+//    @JsonIgnore
     @OneToMany(mappedBy = "question",cascade = CascadeType.ALL, orphanRemoval = true)
     @Where(clause = "parent_id is null")
     @JsonIgnore
-    private List<QuestionComment> questionComments;
+    private List<QuestionComment> questionComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "question")
     @Builder.Default

@@ -4,10 +4,14 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 
+import javax.validation.constraints.NotEmpty;
+
 @Getter
 @Builder
 public class LoginRequestDTO {
+    @NotEmpty
     private final String loginId;
+    @NotEmpty
     private final String loginPw;
 
     @JsonCreator

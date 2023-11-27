@@ -33,7 +33,11 @@ public class QuestionCommentController {
         Member loginMember = (Member)session.getAttribute("loginMember");
 
         RoleType roleType = memberRepository.findByLoginId(loginMember.getLoginId()).getRoleType();
-        if(!validateMemberRole(roleType)) {
+        try {
+            if(!validateMemberRole(roleType)) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -41,18 +45,23 @@ public class QuestionCommentController {
         return new ResponseEntity<>(questionCommentService.commentSave(id, questionCommentRequestDTO), HttpStatus.OK);
     }
 
-    //댓글 수정 , 부분수정이여서 PatchMapping 으로 바꿈
     @PatchMapping("/question/{questionId}/comments/{id}")
     public ResponseEntity<Long> update(@PathVariable Long questionId,
-                                       @PathVariable Long id,
-                                       @RequestBody QuestionCommentRequestDTO requestDTO, HttpSession session) {
-        Member loginMember = (Member)session.getAttribute("loginMember");
+                                                      @PathVariable Long id,
+                                                      @RequestBody QuestionCommentRequestDTO requestDTO, HttpSession session) {
+        Member loginMember = (Member) session.getAttribute("loginMember");
 
         Member loginNickname = memberRepository.findByNickname(loginMember.getNickname());
-        if(!Objects.equals(requestDTO.getWriter(), loginNickname.getNickname())) {
+        String writer = questionCommentRepository.findById(id).get().getWriter();
+
+        System.out.println("loginNickname = " + loginNickname.getNickname());
+        try {
+            if (!Objects.equals(writer, loginNickname.getNickname())) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
         questionCommentService.updateComment(questionId, id, requestDTO);
         return new ResponseEntity<>(id, HttpStatus.OK);
     }
@@ -67,7 +76,11 @@ public class QuestionCommentController {
             return new IllegalArgumentException("해당 댓글이 존재하지 않습니다.");
         });
 
-        if(!Objects.equals(questionComment.getWriter(), loginNickname.getNickname())) {
+        try {
+            if (!Objects.equals(questionComment.getWriter(), loginNickname.getNickname())) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -77,7 +90,7 @@ public class QuestionCommentController {
     //대댓글 등록
     @PostMapping("/question/{id}/comment/{parentId}/child")
     public ResponseEntity<QuestionCommentResponseDTO> createChildComment(@PathVariable Long parentId,@PathVariable Long id,
-                                                   @RequestBody QuestionCommentRequestDTO requestDTO, HttpSession session) {
+                                                                         @RequestBody QuestionCommentRequestDTO requestDTO, HttpSession session) {
         Member loginMember = (Member)session.getAttribute("loginMember");
         requestDTO.setWriter(loginMember.getNickname());
 

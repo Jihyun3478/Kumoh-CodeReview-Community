@@ -31,7 +31,6 @@ public class CodeQuestionComment extends BaseTimeEntity{
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
-    @NotEmpty
     @Column(columnDefinition = "LONGTEXT", name = "CODE_CONTENT")
     private String codeContent;
 

@@ -8,7 +8,6 @@ import com.kcr.domain.entity.QuestionComment;
 import com.kcr.repository.QuestionCommentRepository;
 import com.kcr.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,10 +21,9 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class QuestionCommentService implements CommentService {
-    @Autowired
-    private QuestionCommentRepository questionCommentRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
+
+    private final QuestionCommentRepository questionCommentRepository;
+    private final QuestionRepository questionRepository;
 
     //댓글삭제
     @Override
@@ -97,6 +95,7 @@ public class QuestionCommentService implements CommentService {
 
         return commentsPage.map(QuestionCommentResponseDTO::toCommentDTO);
     }
+
     @Transactional
     public QuestionCommentResponseDTO saveChildComment(Long parentId, Long questionID, QuestionCommentRequestDTO requestDTO) {
         String content = requestDTO.getContent();
@@ -106,7 +105,7 @@ public class QuestionCommentService implements CommentService {
         QuestionComment parent = questionCommentRepository.findById(parentId)
                 .orElseThrow(() -> new IllegalArgumentException("부모 댓글이 존재하지 않습니다: " + parentId));
         Question question = questionRepository.findById(questionID)
-                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다: " +questionID));
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다: " + questionID));
         requestDTO.setQuestion(question);
         QuestionComment questionComment = new QuestionComment(requestDTO);
         QuestionComment child = questionCommentRepository.save(questionComment);

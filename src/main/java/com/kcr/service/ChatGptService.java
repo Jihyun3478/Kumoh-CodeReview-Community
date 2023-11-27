@@ -10,7 +10,6 @@ import com.kcr.repository.ChatGPTRepository;
 import com.kcr.repository.QuestionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -30,10 +29,8 @@ import java.util.Optional;
 @Service
 public class ChatGptService {
     private final RestTemplate restTemplate;
-    @Autowired
-    private ChatGPTRepository chatGPTRepository;
-    @Autowired
-    private QuestionRepository questionRepository;
+    private final ChatGPTRepository chatGPTRepository;
+    private final QuestionRepository questionRepository;
     //yml.에 있는 api key파일
     @Value("${openai.api.token}")
     private String apiKey;
@@ -69,11 +66,6 @@ public class ChatGptService {
     @Transactional
     public ChatGptResponse askQuestion2(Question question,ChatGptResponse chatGptResponse) {
         List<ChatGptMessage> messages = new ArrayList<>();
-       /* Question question = questionRepository.findById(questionID).orElseThrow(() ->
-                new IllegalArgumentException("댓글 쓰기 실패: 해당 게시글이 존재하지 않습니다." + questionID));*/
-        //  chatGPT.setQuestion(question);
-      //  Question question = resquestDTO.toSaveEntity();
-        // System.out.println("question id : "+question.getId());
         messages.add(ChatGptMessage.builder()
                 .role(ChatGptConfig.ROLE)
                 .content(question.getContent())
@@ -90,7 +82,6 @@ public class ChatGptService {
                                 ChatGptConfig.TEMPERATURE,
                                 ChatGptConfig.STREAM,
                                 messages
-                                //ChatGptConfig.TOP_P
                         )
                 )
         );

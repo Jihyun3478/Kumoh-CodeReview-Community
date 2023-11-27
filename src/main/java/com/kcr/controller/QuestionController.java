@@ -10,6 +10,7 @@ import com.kcr.domain.entity.Member;
 import com.kcr.domain.entity.Question;
 import com.kcr.domain.type.RoleType;
 import com.kcr.repository.MemberRepository;
+import com.kcr.repository.QuestionCommentRepository;
 import com.kcr.repository.QuestionRepository;
 import com.kcr.service.ChatGptService;
 import com.kcr.service.QuestionCommentService;
@@ -38,6 +39,7 @@ public class QuestionController {
     private final ChatGptService chatGptService;
     private final MemberRepository memberRepository;
     private final QuestionRepository questionRepository;
+    private final QuestionCommentRepository questionCommentRepository;
 
     /* ================ API ================ */
     /* 게시글 등록 */
@@ -46,21 +48,29 @@ public class QuestionController {
         Member loginMember = (Member)session.getAttribute("loginMember");
 
         RoleType roleType = memberRepository.findByLoginId(loginMember.getLoginId()).getRoleType();
-        if(!validateMemberRole(roleType)) {
+        try {
+            if(!validateMemberRole(roleType)) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
         requestDTO.setWriter(loginMember.getNickname());
         return new ResponseEntity<>(questionService.save(requestDTO), HttpStatus.OK);
     }
 
-    /* 게시글 수정 */
     @PatchMapping("/api/question/{id}")
     public ResponseEntity<QuestionResponseDTO> update(@PathVariable Long id, @RequestBody QuestionRequestDTO requestDTO, HttpSession session) {
-        Member loginMember = (Member)session.getAttribute("loginMember");
+        Member loginMember = (Member) session.getAttribute("loginMember");
 
         Member loginNickname = memberRepository.findByNickname(loginMember.getNickname());
-        if(!Objects.equals(requestDTO.getWriter(), loginNickname.getNickname())) {
+        String writer = questionRepository.findById(id).get().getWriter();
+
+        try {
+            if (!Objects.equals(writer, loginNickname.getNickname())) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(questionService.update(id, requestDTO), HttpStatus.OK);
@@ -76,7 +86,11 @@ public class QuestionController {
             return new IllegalArgumentException("해당 게시글이 존재하지 않습니다.");
         });
 
-        if(!Objects.equals(question.getWriter(), loginNickname.getNickname())) {
+        try {
+            if (!Objects.equals(question.getWriter(), loginNickname.getNickname())) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(questionService.delete(id), HttpStatus.OK);
@@ -105,6 +119,7 @@ public class QuestionController {
     @GetMapping("/question")
     public ResponseEntity<Page<QuestionListResponseDTO>> findAllByCreateDate(@PageableDefault(sort = "createDate", direction = Sort.Direction.DESC, size = 15) Pageable pageable) {
         Page<QuestionListResponseDTO> responseDTOS = questionService.findAll(pageable);
+
         return new ResponseEntity<>(responseDTOS, HttpStatus.OK);
     }
 
@@ -119,9 +134,13 @@ public class QuestionController {
     @GetMapping("/question/{id}")
     public ResponseEntity<QuestionResponseDTO> findById(@PathVariable("id") Long id, Model model, HttpSession session,@PageableDefault(size = 5)Pageable pageable) {
         Member loginMember = (Member)session.getAttribute("loginMember");
-
         RoleType roleType = memberRepository.findByLoginId(loginMember.getLoginId()).getRoleType();
-        if(!validateMemberRole(roleType)) {
+
+        try {
+            if (!validateMemberRole(roleType)) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -129,14 +148,23 @@ public class QuestionController {
         questionService.updateViews(id); // views++
         String content = questionResponseDTO.getContent();
         log.info("질문내용: "+content);
-
+        ChatGptResponse chatGptResponse = null;
         //gpt 댓글
-        ChatGptResponse chatGptResponse = chatGptService.findById(id);
-        questionResponseDTO.setChatGPT(chatGptResponse);
+        try {
+             chatGptResponse = chatGptService.findById(id);
+            questionResponseDTO.setChatGPT(chatGptResponse);
+            log.info("gpt", questionResponseDTO);
+
+        } catch (NullPointerException e) {
+            questionResponseDTO.setChatGPT(null);
+            log.error("error", questionResponseDTO);
+        }
 
         //댓글 페이징 처리
+        Long totalComments = questionCommentRepository.countByQuestionId(id);
         Page<QuestionCommentResponseDTO> questionCommentDTOPage = questionCommentService.findAllWithChild2(id, pageable);
         questionResponseDTO.setQuestionComments(questionCommentDTOPage);
+        questionResponseDTO.setTotalComments(totalComments);
 
         model.addAttribute("questionCommentList", questionCommentDTOPage);
         model.addAttribute("chatGPT", chatGptResponse);

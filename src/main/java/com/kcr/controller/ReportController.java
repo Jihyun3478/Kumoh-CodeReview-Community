@@ -1,8 +1,6 @@
 package com.kcr.controller;
 
-import com.kcr.domain.dto.question.QuestionListResponseDTO;
 import com.kcr.domain.dto.report.PostReportRequestDTO;
-import com.kcr.domain.dto.report.ReportResponseDTO;
 import com.kcr.domain.dto.report.WriterReportRequestDTO;
 import com.kcr.domain.entity.Report;
 import com.kcr.service.ReportService;
@@ -17,8 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -40,7 +36,7 @@ public class ReportController {
 
     // Q&A 게시글 댓글 신고
     @PostMapping("/reportByQuestionComment") // 댓글 아이디
-    public ResponseEntity<Long> saveReportByQuestionComment(@RequestBody PostReportRequestDTO requestDTO) {
+    public ResponseEntity<Long> saveReportByQuestionComment(@RequestBody WriterReportRequestDTO requestDTO) {
         return new ResponseEntity<>(reportService.saveQuestionCommentReport(requestDTO), HttpStatus.OK);
     }
 
@@ -52,7 +48,7 @@ public class ReportController {
 
     // 코드리뷰 게시글 댓글 신고
     @PostMapping("/reportByCodequestionComment") // 댓글 아이디
-    public ResponseEntity<Long> saveReportByCodequestionComment(@RequestBody PostReportRequestDTO requestDTO) {
+    public ResponseEntity<Long> saveReportByCodequestionComment(@RequestBody WriterReportRequestDTO requestDTO) {
         return new ResponseEntity<>(reportService.saveCodequestionCommentReport(requestDTO), HttpStatus.OK);
     }
 

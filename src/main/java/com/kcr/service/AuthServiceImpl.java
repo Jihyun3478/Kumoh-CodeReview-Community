@@ -1,13 +1,18 @@
 package com.kcr.service;
 
+import com.kcr.domain.dto.member.MsgResponseDTO;
 import com.kcr.domain.entity.Member;
+import com.kcr.domain.entity.Salt;
 import com.kcr.domain.exception.CustomException;
 import com.kcr.domain.type.RoleType;
 import com.kcr.repository.MemberRepository;
 import com.kcr.service.util.RedisUtil;
+//import com.kcr.service.util.SaltUtil;
 import com.kcr.service.util.SaltUtil;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +28,6 @@ public class AuthServiceImpl implements AuthService {
     private final MemberRepository memberRepository;
     private final RedisUtil redisUtil;
     private final SaltUtil saltUtil;
-    private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZ0aHgTBcXukeZygoC";
     private static final String emailAddress = "@kumoh.ac.kr";
 
     @Transactional
@@ -43,13 +47,13 @@ public class AuthServiceImpl implements AuthService {
         // 아이디 중복 확인
         Member checkLoginId = memberRepository.findByLoginId(loginId);
         if (!(checkLoginId == null)) {
-            throw new CustomException(DUPLICATED_ID);
+            ResponseEntity.ok(new MsgResponseDTO("중복된 아이디입니다.", HttpStatus.BAD_REQUEST.value()));
         }
 
         // 닉네임 중복 확인
         Member checkNickname = memberRepository.findByNickname(nickname);
         if (!(checkNickname == null)) {
-            throw new CustomException(DUPLICATED_NICKNAME);
+            ResponseEntity.ok(new MsgResponseDTO("중복된 닉네임입니다.", HttpStatus.BAD_REQUEST.value()));
         }
 
         RoleType role = RoleType.NOT_PERMITTED;
@@ -62,9 +66,10 @@ public class AuthServiceImpl implements AuthService {
     public Member login(String loginId, String loginPw) {
         Member member = memberRepository.findByLoginId(loginId);
         if(member == null) {
-            throw new CustomException(NOT_MATCH_INFORMATION);
+            ResponseEntity.ok(new MsgResponseDTO("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST.value()));
         }
 
+//        assert member != null;
 //        String memberSalt = member.getSalt().getSalt();
 //        loginPw = saltUtil.encodePassword(memberSalt, loginPw);
 
@@ -79,7 +84,9 @@ public class AuthServiceImpl implements AuthService {
     @Transactional
     public Member findByLoginId(String loginId) throws NotFoundException {
         Member member = memberRepository.findByLoginId(loginId);
-        if(member == null) throw new NotFoundException("멤버가 조회되지 않음");
+        if(member == null) {
+            ResponseEntity.ok(new MsgResponseDTO("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST.value()));
+        }
         return member;
     }
 
@@ -90,7 +97,9 @@ public class AuthServiceImpl implements AuthService {
         String loginId = redisUtil.getData(key);
         Member member = memberRepository.findByLoginId(loginId);
 
-        if(member == null) throw new NotFoundException("멤버가 조회되지않음");
+        if(member == null) {
+            ResponseEntity.ok(new MsgResponseDTO("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST.value()));
+        }
         modifyUserRole(member, RoleType.USER);
 
         redisUtil.deleteData(key);
@@ -100,8 +109,10 @@ public class AuthServiceImpl implements AuthService {
     @Override
     @Transactional
     public void sendVerificationMail(Member member) throws NotFoundException {
-        String VERIFICATION_LINK = "http://localhost:8080/api/signup/verify/";
-        if(member == null) throw new NotFoundException("멤버가 조회되지 않음");
+        String VERIFICATION_LINK = "http://localhost:8080/signup/verify/";
+        if(member == null) {
+            ResponseEntity.ok(new MsgResponseDTO("존재하지 않는 회원입니다.", HttpStatus.BAD_REQUEST.value()));
+        }
         UUID uuid = UUID.randomUUID();
 
         redisUtil.setDataExpire(uuid.toString(), member.getLoginId(), 60 * 30L);

@@ -8,11 +8,15 @@ import com.kcr.domain.dto.member.MsgResponseDTO;
 import com.kcr.domain.entity.CodeQuestion;
 import com.kcr.domain.entity.Member;
 import com.kcr.domain.type.RoleType;
+import com.kcr.repository.CodeQuestionCommentRepository;
 import com.kcr.repository.CodeQuestionRepository;
 import com.kcr.repository.MemberRepository;
 import com.kcr.service.CodeQuestionCommentService;
 import com.kcr.service.CodeQuestionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,6 +30,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Objects;
 
 @RestController
+@Slf4j
 @RequiredArgsConstructor
 public class CodeQuestionController {
 
@@ -33,15 +38,21 @@ public class CodeQuestionController {
     private final CodeQuestionCommentService codeQuestionCommentService;
     private final MemberRepository memberRepository;
     private final CodeQuestionRepository codeQuestionRepository;
+    private final CodeQuestionCommentRepository codeQuestionCommentRepository;
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /* ================ API ================ */
-    /* 게시글 등록 */
+    /* 게시글 등록 */ // 세션 아이디를 뽑아서 바디에 넣는다
     @PostMapping("/api/codequestion")
-    public ResponseEntity<CodeQuestionResponseDTO> save(@RequestBody CodeQuestionRequestDTO requestDTO, HttpSession session) {
+    public ResponseEntity<CodeQuestionResponseDTO> save(@RequestBody CodeQuestionRequestDTO requestDTO, HttpSession session) { // , HttpSession session
         Member loginMember = (Member)session.getAttribute("loginMember");
 
         RoleType roleType = memberRepository.findByLoginId(loginMember.getLoginId()).getRoleType();
-        if(!validateMemberRole(roleType)) {
+        try {
+            if(!validateMemberRole(roleType)) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -49,16 +60,21 @@ public class CodeQuestionController {
         return new ResponseEntity<>(codeQuestionService.save(requestDTO), HttpStatus.OK);
     }
 
-    /* 게시글 수정 */
     @PatchMapping("/api/codequestion/{id}")
     public ResponseEntity<CodeQuestionResponseDTO> update(@PathVariable Long id, @RequestBody CodeQuestionRequestDTO requestDTO, HttpSession session) {
-        Member loginMember = (Member)session.getAttribute("loginMember");
+        Member loginMember = (Member) session.getAttribute("loginMember");
 
         Member loginNickname = memberRepository.findByNickname(loginMember.getNickname());
-        if(!Objects.equals(requestDTO.getWriter(), loginNickname.getNickname())) {
+        String writer = codeQuestionRepository.findById(id).get().getWriter();
+
+        System.out.println("loginNickname = " + loginNickname.getNickname());
+        try {
+            if (!Objects.equals(writer, loginNickname.getNickname())) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
         return new ResponseEntity<>(codeQuestionService.update(id, requestDTO), HttpStatus.OK);
     }
 
@@ -72,7 +88,11 @@ public class CodeQuestionController {
             return new IllegalArgumentException("해당 게시글이 존재하지 않습니다.");
         });
 
-        if(!Objects.equals(codeQuestion.getWriter(), loginNickname.getNickname())) {
+        try {
+            if (!Objects.equals(codeQuestion.getWriter(), loginNickname.getNickname())) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
         return new ResponseEntity<>(codeQuestionService.delete(id), HttpStatus.OK);
@@ -116,9 +136,13 @@ public class CodeQuestionController {
     @GetMapping("/codequestion/{id}")
     public ResponseEntity<CodeQuestionResponseDTO> findById(@PathVariable("id") Long id, Model model, HttpSession session,@PageableDefault(size = 5) Pageable pageable) {
         Member loginMember = (Member)session.getAttribute("loginMember");
-
         RoleType roleType = memberRepository.findByLoginId(loginMember.getLoginId()).getRoleType();
-        if(!validateMemberRole(roleType)) {
+
+        try {
+            if (!validateMemberRole(roleType)) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
 
@@ -126,8 +150,10 @@ public class CodeQuestionController {
         codeQuestionService.updateViews(id); // views++
 
         //댓글
+        Long totalComments = codeQuestionCommentRepository.countByCodeQuestionId(id);
         Page<CodeQuestionCommentResponseDTO> codeQuestionCommentDTOPage = codeQuestionCommentService.findAllWithChild2(id, pageable);
         responseDTO.setCodeQuestionComment(codeQuestionCommentDTOPage);
+        responseDTO.setTotalComments(totalComments);
 
         model.addAttribute("codeQuestionCommentList", codeQuestionCommentDTOPage);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
