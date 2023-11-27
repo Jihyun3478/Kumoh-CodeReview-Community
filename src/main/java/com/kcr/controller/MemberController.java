@@ -74,20 +74,6 @@ public class MemberController {
         return "redirect:/";
     }
 
-    /* 인증 메일 전송 */
-//    @PostMapping("/api/signup/verify")
-//    public ResponseEntity<MsgResponseDTO> verify(MailRequestDTO requestDTO) { // , HttpServletRequest req, HttpServletResponse res
-//        try {
-//            Member member = authServiceImpl.findByLoginId(requestDTO.getLoginId());
-//            System.out.println("1");
-//            authServiceImpl.sendVerificationMail(member);
-//            System.out.println("1");
-//            return ResponseEntity.ok(new MsgResponseDTO("인증 메일 전송 완료", HttpStatus.OK.value()));
-//        } catch (Exception exception) {
-//            return ResponseEntity.ok(new MsgResponseDTO("인증 메일 전송 실패", HttpStatus.BAD_REQUEST.value()));
-//        }
-//    }
-
     @PostConstruct
     public void init() {
         memberRepository.save(new Member("a1234@kumoh.ac.kr", "a1234", RoleType.USER, "사용자1", "20200930"));
