@@ -57,11 +57,17 @@ public class Member extends BaseTimeEntity {
     @JoinColumn(name = "CODE_QUESTION_COMMENT_ID")
     private CodeQuestionComment codeQuestionComment;
 
-    public Member(String loginId, String loginPw, RoleType roleType, String nickname, String stuNum) {
+    public Member(String loginId, String loginPw, RoleType roleType, String nickname, String stuNum, Salt salt) {
         this.loginId = loginId;
         this.loginPw = loginPw;
         this.roleType = roleType;
         this.nickname = nickname;
         this.stuNum = stuNum;
+        this.salt = salt;
+    }
+
+    public Member(String loginId, String loginPw) {
+        this.loginId = loginId;
+        this.loginPw = loginPw;
     }
 }

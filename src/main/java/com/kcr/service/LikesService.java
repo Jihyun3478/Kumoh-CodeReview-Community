@@ -7,6 +7,7 @@ import com.kcr.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,6 +24,7 @@ public class LikesService {
 
 
     //q&a게시글 공감
+    @Transactional
     public void questionLikes(Long questionID, LikesRequestDTO likesRequestDTO){
         Question question = questionRepository.findById(questionID).orElseThrow(() ->
                 new IllegalArgumentException("공감 실패: 해당 게시글이 존재하지 않습니다." + questionID));
@@ -35,6 +37,7 @@ public class LikesService {
         likesRepository.save(likes);
     }
     //q&a 게시글 공감 취소
+    @Transactional
     public void cancelQuestionLikes(Long questionID){
         Question question = questionRepository.findById(questionID).orElseThrow(() ->
                 new IllegalArgumentException("게시글이 존재하지 않습니다: " + questionID));
@@ -46,6 +49,7 @@ public class LikesService {
     }
 
     //codeQuestion 게시글 공감
+    @Transactional
     public void codeQuestionLikes(Long questionID, LikesRequestDTO likesRequestDTO){
         CodeQuestion codeQuestion = codeQuestionRepository.findById(questionID).orElseThrow(() ->
                 new IllegalArgumentException("공감 실패: 해당 게시글이 존재하지 않습니다." + questionID));
@@ -58,6 +62,7 @@ public class LikesService {
         likesRepository.save(likes);
     }
     //codeQuestion 게시글 공감 취소
+    @Transactional
     public void cancelCodeQuestionLikes(Long questionID){
         CodeQuestion codeQuestion = codeQuestionRepository.findById(questionID).orElseThrow(() ->
                 new IllegalArgumentException("공감 실패: 해당 게시글이 존재하지 않습니다." + questionID));
@@ -69,6 +74,7 @@ public class LikesService {
     }
 
     //q&a댓글 공감
+    @Transactional
     public void questionCommentLikes(Long commentID, LikesRequestDTO likesRequestDTO){
         QuestionComment questionComment = questionCommentRepository.findById(commentID).orElseThrow(() ->
                 new IllegalArgumentException("공감 실패 : 해당 댓글이 존재하지 않습니다: " + commentID));
@@ -83,6 +89,7 @@ public class LikesService {
     }
 
     //q&a댓글 공감 취소
+    @Transactional
     public void cancelquestionCommentLikes(Long commentID){
         QuestionComment questionComment = questionCommentRepository.findById(commentID).orElseThrow(() ->
                 new IllegalArgumentException("공감 실패 : 해당 댓글이 존재하지 않습니다: " + commentID));
@@ -94,6 +101,7 @@ public class LikesService {
     }
 
     //codeQuestion 댓글 공감
+    @Transactional
     public void codeQuestionCommentLikes(Long commentID, LikesRequestDTO likesRequestDTO){
         CodeQuestionComment codeQuestionComment = codeQuestionCommentRepository.findById(commentID).orElseThrow(() ->
                 new IllegalArgumentException("공감 실패 : 해당 댓글이 존재하지 않습니다: " + commentID));
@@ -108,6 +116,7 @@ public class LikesService {
     }
 
     //codeQuestion 댓글 공감 취소
+    @Transactional
     public void cancelCodeQuestionCommentLikes(Long commentID){
         CodeQuestionComment codeQuestionComment = codeQuestionCommentRepository.findById(commentID).orElseThrow(() ->
                 new IllegalArgumentException("공감 실패 : 해당 댓글이 존재하지 않습니다: " + commentID));
@@ -117,6 +126,7 @@ public class LikesService {
         codeQuestionComment.setTotalLikes(codeQuestionComment.getTotalLikes()-1);
         codeQuestionCommentRepository.save(codeQuestionComment);
     }
+    @Transactional
     public List<LikesResponseDTO> findAllByQuestion(Long questionID) {
         return likesRepository.findAllWithQuestion(questionID).stream()
                 .map(LikesResponseDTO::new)

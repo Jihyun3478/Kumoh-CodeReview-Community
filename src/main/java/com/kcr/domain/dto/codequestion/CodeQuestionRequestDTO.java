@@ -1,13 +1,12 @@
 package com.kcr.domain.dto.codequestion;
 
 import com.kcr.domain.entity.CodeQuestion;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 /* 게시글의 등록과 수정을 처리할 요청 클래스 */
 @Getter
-@Setter // (access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CodeQuestionRequestDTO {
     private String title;
     private String writer;

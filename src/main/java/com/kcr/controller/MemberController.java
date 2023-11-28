@@ -2,7 +2,6 @@ package com.kcr.controller;
 
 import com.kcr.domain.dto.member.MsgResponseDTO;
 import com.kcr.domain.dto.member.login.LoginRequestDTO;
-import com.kcr.domain.dto.member.mail.MailRequestDTO;
 import com.kcr.domain.entity.Member;
 import com.kcr.domain.type.RoleType;
 import com.kcr.repository.MemberRepository;
@@ -16,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.util.Objects;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,7 +30,7 @@ public class MemberController {
     /* ================ API ================ */
     /* 회원가입 */
     @PostMapping("/api/signup")
-    public ResponseEntity<MsgResponseDTO> signup(@RequestBody @Valid Member loginMember, BindingResult bindingResult) {
+    public ResponseEntity<MsgResponseDTO> signup(@RequestBody @Valid Member loginMember) {
         if(loginMember == null) {
             return ResponseEntity.ok(new MsgResponseDTO("회원가입 완료", HttpStatus.OK.value()));
         }
@@ -49,20 +48,69 @@ public class MemberController {
     /* 로그인 */
     @PostMapping("/api/signin")
     public ResponseEntity<MsgResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDto, BindingResult bindingResult, HttpServletRequest request) {
-        Member loginMember = authServiceImpl.login(loginRequestDto.getLoginId(), loginRequestDto.getLoginPw());
+        String loginId = loginRequestDto.getLoginId();
+        String loginPw = loginRequestDto.getLoginPw();
 
-        if (loginMember == null) {
-            bindingResult.reject("loginFail", "아이디 또는 비밀번호가 맞지 않습니다.");
+        Member member = memberRepository.findByLoginId(loginRequestDto.getLoginId());
+        if (member == null || member.getLoginPw() == null) {
+            try {
+                throw new IllegalArgumentException("존재하지 않는 회원입니다.");
+            } catch (IllegalArgumentException e) {
+                return new ResponseEntity<>(new MsgResponseDTO(e.getMessage(), HttpStatus.FORBIDDEN.value()), HttpStatus.FORBIDDEN);
+            }
         }
 
-        //로그인 성공 처리
-        //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
+        validatePassword(loginPw, member);
+//        Member loginMember = authServiceImpl.login(loginId, loginPw);
+        authServiceImpl.login(loginId, loginPw);
+
+        // 로그인 성공 처리
         HttpSession session = request.getSession();
         System.out.println(session.getId());
 
-        //세션에 로그인 회원 정보 보관
-        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
+        // 세션에 로그인 회원 정보 보관
+        session.setAttribute(SessionConst.LOGIN_MEMBER, member);
         return ResponseEntity.ok(new MsgResponseDTO("로그인 완료", HttpStatus.OK.value()));
+    }
+
+//    @PostMapping("/api/signin")
+//    public ResponseEntity<MsgResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDto, BindingResult bindingResult, HttpServletRequest request) {
+//        String loginId = loginRequestDto.getLoginId();
+//        String loginPw = loginRequestDto.getLoginPw();
+//
+//        Member member = memberRepository.findByLoginId(loginRequestDto.getLoginId());
+//        if(member == null) {
+//            try {
+//                throw new IllegalArgumentException();
+//            } catch (IllegalArgumentException e) {
+//                new ResponseEntity<>("존재하지 않는 회원입니다.", HttpStatus.FORBIDDEN);
+//            }
+//        }
+//
+//        if(member.getLoginPw() != null) {
+//            validatePassword(loginPw, member);
+//        }
+//
+//        Member loginMember = authServiceImpl.login(loginId, loginPw);
+//
+//        //로그인 성공 처리
+//        //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
+//        HttpSession session = request.getSession();
+//        System.out.println(session.getId());
+//
+//        //세션에 로그인 회원 정보 보관
+//        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
+//        return ResponseEntity.ok(new MsgResponseDTO("로그인 완료", HttpStatus.OK.value()));
+//    }
+
+    private static void validatePassword(String loginPw, Member member) {
+        try {
+            if (!(Objects.equals(loginPw, member.getLoginPw()))) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException e) {
+            new ResponseEntity<>("존재하지 않는 회원입니다.", HttpStatus.FORBIDDEN);
+        }
     }
 
     @PostMapping("/api/signout")
@@ -72,11 +120,6 @@ public class MemberController {
             session.invalidate();
         }
         return "redirect:/";
-    }
-
-    @PostConstruct
-    public void init() {
-        memberRepository.save(new Member("a1234@kumoh.ac.kr", "a1234", RoleType.USER, "사용자1", "20200930"));
     }
 
     /* ================ UI ================ */

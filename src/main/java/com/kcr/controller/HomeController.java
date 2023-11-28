@@ -21,7 +21,7 @@ public class HomeController {
     private final QuestionRepository questionRepository;
     private final CodeQuestionRepository codeQuestionRepository;
 
-    @GetMapping("/question/top/five/")
+    @GetMapping("/question/top/five")
     public ResponseEntity<Page<QuestionListResponseDTO>> findTop5Question(Pageable pageable) {
         Page<QuestionListResponseDTO> questionListResponseDTOS = questionRepository.findTop5ByOrderByCreateDateDesc(pageable);
         return new ResponseEntity<>(questionListResponseDTOS, HttpStatus.OK);
