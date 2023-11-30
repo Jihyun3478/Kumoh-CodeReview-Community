@@ -18,7 +18,6 @@ public class BaseTimeEntity {
     @CreatedDate
     private String createDate;
 
-//    @Column(nullable = false)
     @LastModifiedDate
     private String modifiedDate;
 

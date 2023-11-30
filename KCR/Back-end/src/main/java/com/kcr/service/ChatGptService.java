@@ -68,11 +68,6 @@ public class ChatGptService {
     @Transactional
     public ChatGptResponse askQuestion2(Question question) {
         List<ChatGptMessage> messages = new ArrayList<>();
-       /* Question question = questionRepository.findById(questionID).orElseThrow(() ->
-                new IllegalArgumentException("댓글 쓰기 실패: 해당 게시글이 존재하지 않습니다." + questionID));*/
-        //  chatGPT.setQuestion(question);
-        //  Question question = resquestDTO.toSaveEntity();
-        // System.out.println("question id : "+question.getId());
         messages.add(ChatGptMessage.builder()
                 .role(ChatGptConfig.ROLE)
                 .content(question.getContent())
@@ -89,7 +84,6 @@ public class ChatGptService {
                                 ChatGptConfig.TEMPERATURE,
                                 ChatGptConfig.STREAM,
                                 messages
-                                //ChatGptConfig.TOP_P
                         )
                 )
         );

@@ -12,7 +12,6 @@ import java.util.List;
 
 @Repository
 public interface CodeQuestionCommentRepository extends JpaRepository<CodeQuestionComment, Long> {
-    List<CodeQuestionComment> findAllByCodeQuestionId(Long codeQuestionId);
 
     @Query("SELECT qc FROM CodeQuestionComment qc WHERE qc.parent.id = :parentId")
     List<CodeQuestionComment> findChildCommentsByParentId(@Param("parentId") Long parentId);

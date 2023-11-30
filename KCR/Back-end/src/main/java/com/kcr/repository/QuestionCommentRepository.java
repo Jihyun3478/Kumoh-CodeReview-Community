@@ -14,7 +14,6 @@ public interface QuestionCommentRepository extends JpaRepository<QuestionComment
     Page<QuestionComment> findAll(Pageable pageable);
     List<QuestionComment> findAllByQuestionId(Long questionID);
     //부모댓글이 없을때(최상위 댓글일때)
-    List<QuestionComment> findByQuestionIdAndParentIsNull(Long questionId);
 
     @Query("SELECT qc FROM QuestionComment qc WHERE qc.parent.id = :parentId")
     List<QuestionComment> findChildCommentsByParentId(@Param("parentId") Long parentId);
