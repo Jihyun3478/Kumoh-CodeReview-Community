@@ -40,7 +40,6 @@ public class CodeQuestionController {
     private final MemberRepository memberRepository;
     private final CodeQuestionRepository codeQuestionRepository;
     private final CodeQuestionCommentRepository codeQuestionCommentRepository;
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
 
     /* ================ API ================ */
     /* 게시글 등록 */ // 세션 아이디를 뽑아서 바디에 넣는다

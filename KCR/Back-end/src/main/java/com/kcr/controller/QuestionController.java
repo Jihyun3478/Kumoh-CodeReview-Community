@@ -61,18 +61,6 @@ public class QuestionController {
         return new ResponseEntity<>(questionService.save(requestDTO), HttpStatus.OK);
     }
 
-    /* 게시글 수정 */
-//    @PatchMapping("/api/question/{id}")
-//    public ResponseEntity<QuestionResponseDTO> update(@PathVariable Long id, @RequestBody QuestionRequestDTO requestDTO, HttpSession session) {
-//        Member loginMember = (Member)session.getAttribute("loginMember");
-//
-//        Member loginNickname = memberRepository.findByNickname(loginMember.getNickname());
-//        if(!Objects.equals(requestDTO.getWriter(), loginNickname.getNickname())) {
-//            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-//        }
-//        return new ResponseEntity<>(questionService.update(id, requestDTO), HttpStatus.OK);
-//    }
-
     @PatchMapping("/api/question/{id}")
     public ResponseEntity<QuestionResponseDTO> update(@PathVariable Long id, @RequestBody QuestionRequestDTO requestDTO, HttpSession session) {
         Member loginMember = (Member) session.getAttribute("loginMember");
