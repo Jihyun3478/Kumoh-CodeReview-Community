@@ -5,7 +5,6 @@ import com.kcr.domain.dto.likes.LikesResponseDTO;
 import com.kcr.domain.entity.*;
 import com.kcr.repository.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

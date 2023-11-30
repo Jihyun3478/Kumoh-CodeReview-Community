@@ -25,7 +25,6 @@ public class ChatGptResponse {
     private String model;
     private Usage usage;
     private List<Choice> choices;
-    //private Long questionID;
     private Question question;
     private String content;
 

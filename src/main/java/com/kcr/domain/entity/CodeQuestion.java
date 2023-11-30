@@ -65,6 +65,16 @@ public class CodeQuestion extends BaseTimeEntity {
     private final List<HashTag> hashTags = new ArrayList<>();
 
     /* 생성자 */
+    public CodeQuestion(Long id, String title, String writer, String content, String codeContent, Long totalLikes, Long views) {
+        this.id= id;
+        this.title = title;
+        this.writer = writer;
+        this.content = content;
+        this.codeContent = codeContent;
+        this.totalLikes = totalLikes;
+        this.views = views;
+    }
+
     public CodeQuestion(String title, String writer, String content, String codeContent, Long totalLikes, Long views) {
         this.title = title;
         this.writer = writer;

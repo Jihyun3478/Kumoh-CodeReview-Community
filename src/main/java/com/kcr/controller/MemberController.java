@@ -3,7 +3,6 @@ package com.kcr.controller;
 import com.kcr.domain.dto.member.MsgResponseDTO;
 import com.kcr.domain.dto.member.login.LoginRequestDTO;
 import com.kcr.domain.entity.Member;
-import com.kcr.domain.type.RoleType;
 import com.kcr.repository.MemberRepository;
 import com.kcr.service.AuthServiceImpl;
 import com.kcr.service.util.SessionConst;
@@ -13,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -61,7 +59,6 @@ public class MemberController {
         }
 
         validatePassword(loginPw, member);
-//        Member loginMember = authServiceImpl.login(loginId, loginPw);
         authServiceImpl.login(loginId, loginPw);
 
         // 로그인 성공 처리
@@ -72,36 +69,6 @@ public class MemberController {
         session.setAttribute(SessionConst.LOGIN_MEMBER, member);
         return ResponseEntity.ok(new MsgResponseDTO("로그인 완료", HttpStatus.OK.value()));
     }
-
-//    @PostMapping("/api/signin")
-//    public ResponseEntity<MsgResponseDTO> login(@RequestBody LoginRequestDTO loginRequestDto, BindingResult bindingResult, HttpServletRequest request) {
-//        String loginId = loginRequestDto.getLoginId();
-//        String loginPw = loginRequestDto.getLoginPw();
-//
-//        Member member = memberRepository.findByLoginId(loginRequestDto.getLoginId());
-//        if(member == null) {
-//            try {
-//                throw new IllegalArgumentException();
-//            } catch (IllegalArgumentException e) {
-//                new ResponseEntity<>("존재하지 않는 회원입니다.", HttpStatus.FORBIDDEN);
-//            }
-//        }
-//
-//        if(member.getLoginPw() != null) {
-//            validatePassword(loginPw, member);
-//        }
-//
-//        Member loginMember = authServiceImpl.login(loginId, loginPw);
-//
-//        //로그인 성공 처리
-//        //세션이 있으면 있는 세션 반환, 없으면 신규 세션을 생성
-//        HttpSession session = request.getSession();
-//        System.out.println(session.getId());
-//
-//        //세션에 로그인 회원 정보 보관
-//        session.setAttribute(SessionConst.LOGIN_MEMBER, loginMember);
-//        return ResponseEntity.ok(new MsgResponseDTO("로그인 완료", HttpStatus.OK.value()));
-//    }
 
     private static void validatePassword(String loginPw, Member member) {
         try {

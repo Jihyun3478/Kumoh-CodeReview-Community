@@ -4,6 +4,8 @@ spring:
     url: jdbc:mysql://localhost:3306/kcr?serverTimezone=UTC&characterEncoding=UTF-8
     username: root
     password: hoon@0815!!
+    hikari:
+      maximum-pool-size: 20
 
   jpa:
     hibernate:

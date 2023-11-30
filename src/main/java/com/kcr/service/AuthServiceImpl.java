@@ -3,7 +3,6 @@ package com.kcr.service;
 import com.kcr.domain.dto.member.MsgResponseDTO;
 import com.kcr.domain.entity.Member;
 import com.kcr.domain.entity.Salt;
-import com.kcr.domain.exception.CustomException;
 import com.kcr.domain.type.RoleType;
 import com.kcr.repository.MemberRepository;
 import com.kcr.service.util.RedisUtil;
@@ -16,8 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 import java.util.UUID;
-
-import static com.kcr.domain.exception.ErrorCode.*;
 
 @Service
 @RequiredArgsConstructor
@@ -59,31 +56,6 @@ public class AuthServiceImpl implements AuthService {
         Member savedMember = new Member(loginId, saltPw, role, nickname, stuNum, new Salt(salt));
         memberRepository.save(savedMember);
     }
-
-//    @Transactional
-//    public void signup(Member member) {
-//        String loginId = member.getLoginId() + emailAddress;
-//
-//        // 비밀번호 해쉬 암호화
-//        String salt = saltUtil.genSalt();
-//        member.setSalt(new Salt(salt)); // Set salt to member
-//        member.setLoginPw(saltUtil.encodePassword(salt, member.getLoginPw())); // Set hashed password
-//
-//        // 아이디 중복 확인
-//        if (memberRepository.findByLoginId(loginId) != null) {
-//            ResponseEntity.ok(new MsgResponseDTO("중복된 아이디입니다.", HttpStatus.BAD_REQUEST.value()));
-//        }
-//
-//        // 닉네임 중복 확인
-//        if (memberRepository.findByNickname(member.getNickname()) != null) {
-//            ResponseEntity.ok(new MsgResponseDTO("중복된 닉네임입니다.", HttpStatus.BAD_REQUEST.value()));
-//        }
-//
-//        member.setLoginId(loginId);
-//        member.setRoleType(RoleType.NOT_PERMITTED); // Set the role type
-//
-//        memberRepository.save(member); // Save the member with the salt
-//    }
 
     @Transactional
     public Member login(String loginId, String loginPw) {

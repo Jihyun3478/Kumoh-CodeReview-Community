@@ -5,7 +5,7 @@ import lombok.*;
 
 /* 게시글의 등록과 수정을 처리할 요청 클래스 */
 @Getter
-@Setter
+@Setter // (access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CodeQuestionRequestDTO {
     private String title;
