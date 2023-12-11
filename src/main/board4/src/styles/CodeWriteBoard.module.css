@@ -1,0 +1,15 @@
+/* module.css */
+.container {
+  display: flex;
+  justify-content: center;
+  
+  margin-top: 2vh;
+  margin-bottom: 2vh;
+}
+
+.monaco {
+  width: 75vw;
+  height: 60vh;
+
+  margin: 0 auto;
+}

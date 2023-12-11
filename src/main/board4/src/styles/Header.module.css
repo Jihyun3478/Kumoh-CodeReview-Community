@@ -1,0 +1,116 @@
+.kitLogo {
+    display: flex;
+    justify-content: flex-start;
+    object-fit: scale-down;
+}
+
+.Header, .lanking_title {
+    border-width: 0 0 2px 0;
+    border-style: solid;
+}
+.lanking_wapper {
+    width: 180px;
+    align-items: center;
+    justify-content: center;
+    border-width: 0 2px 0 0;
+    border-style: solid;
+}
+
+.header_wapper {
+    width: 100vw;
+    height: 6vh;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    font-family: "GmarketSansBold";
+    align-items: center;
+    justify-content: center;
+}
+
+.kitLogo {
+    padding: 0px;
+    width: 200px;
+    height: 50px;
+    object-fit: scale-down;
+}
+
+.Main {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    padding: 5%;
+}
+
+
+.QnA_Main_wapper, .Code_Main_wapper {
+    width: 70%;
+}
+
+.QnA_list_i, .Code_list_i{
+    border-width: 0 0 2px 0;
+    border-style: solid;
+}
+
+.QnA_list_contents, .Code_list_contents {
+    display: 'flex';
+    justify-content: space-evenly;
+}
+
+.QnA_list_time, .QnA_list_likes,  .Code_list_time, .Code_list_likes{
+    font-family: 'GmarketSansMedium';
+    font-size: small;
+}
+
+
+
+.QnA_list, .Code_list {
+    margin: 2px;
+    padding: 10px;
+    background-color:#87CEFA;
+    border-radius: 15px;
+}
+
+.QnA_list_wapper, .Code_list_wapper {
+    border-width:2px;
+    border-style: solid;
+    border-radius: 5px;
+
+}
+
+.login {
+    border: none;
+    background-color: white;
+    text-decoration: none;
+}
+
+.login:hover {
+    cursor: pointer;
+}
+
+.register {
+    border: none;
+    background-color: white;
+    text-decoration: none;
+}
+
+.register:hover {
+    cursor: pointer;
+}
+
+.logout {
+    border: none;
+    background-color: white;
+    text-decoration: none;
+}
+
+.logout:hover {
+    cursor: pointer;
+}
+
+.goToQnA {
+    text-decoration: none;
+}
+
+.goToCode {
+    text-decoration: none;
+}

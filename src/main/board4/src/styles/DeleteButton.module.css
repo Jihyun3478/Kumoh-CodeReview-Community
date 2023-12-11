@@ -1,0 +1,24 @@
+.delBtn {
+  border: none;
+
+  background-color: white;
+
+  margin-left: 75vw;
+}
+
+.delText {
+  margin-top: 1vh;
+  margin-left: 67vw;
+  padding-left: 1vw;
+
+  font-size: 15px;
+
+  width: 10vw;
+}
+
+.btnDiv {
+  display: flex;
+  justify-content: right;
+
+  margin-right: 1vw;
+}

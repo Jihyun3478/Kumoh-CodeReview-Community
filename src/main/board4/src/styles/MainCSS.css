@@ -1,0 +1,25 @@
+* {
+    margin: 0 auto;
+    padding : 5px;
+    font-family: "GmarketSansBold";
+  }
+  
+  img {
+    object-fit: scale-down;
+  }
+  
+  @font-face {
+    font-family: "GmarketSansBold";
+    src: url(../fonts/GmarketSansTTFBold.ttf);
+  }
+  
+  @font-face {
+    font-family: "GmarketSansMedium";
+    src: url(../fonts/GmarketSansTTFMedium.ttf);
+  }
+  
+  
+  
+  
+  
+  

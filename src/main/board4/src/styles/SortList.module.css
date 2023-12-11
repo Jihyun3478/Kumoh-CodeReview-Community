@@ -1,0 +1,16 @@
+.selectBox {
+    display: inline-block;
+
+    height: 5vh;
+    width: 7vw;
+
+    font-size: 20px;
+    font-family: 'GmarketSansMedium';
+
+    text-align: center;
+    
+}
+
+.optionStyle {
+    font-family: 'GmarketSansMedium';
+}

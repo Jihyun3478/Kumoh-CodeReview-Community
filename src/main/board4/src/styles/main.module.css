@@ -1,0 +1,89 @@
+.Main {
+    display: flex;
+    justify-content: space-between;
+    width: 70%;
+    padding: 5%;
+  }
+
+  .header_wapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    font-family: "GmarketSansBold";
+    align-items: center;
+  }
+  
+  .Header, .lanking_title {
+    border-width: 0 0 2px 0;
+    border-style: solid;
+    padding: auto;
+    align-items: center;
+
+  }
+  
+.lanking_wapper {
+    width: 180px;
+    border-width: 0 2px 0 0;
+    border-style: solid; 
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  }
+
+
+  .kitLogo {
+    padding: 0px;
+    width: 200px;
+    height: 50px;
+    object-fit: scale-down;
+  }
+  
+
+  .Main_wapper {
+    width: 70%;
+  }
+  
+  
+.list_wapper{
+    border-width:2px;
+    border-style: solid;
+    border-radius: 5px;
+  
+  }
+
+  
+
+.list_i{
+    border-width: 0 0 2px 0;
+    border-style: solid;
+  }
+  
+  .list_contents {
+    display: 'flex';
+    justify-content: space-evenly;
+    font-family: 'GmarketSansMedium';
+    font-size: small;
+  }
+  
+  
+  
+  .list {
+    margin: 2px;
+    padding: 10px;
+    background-color:#87CEFA;
+    border-radius: 15px;
+  }
+  
+  
+  
+.lanking_unit_wapper {
+  padding: 5px;
+  display: inline;
+  align-items: center;
+  justify-content: center;
+}
+.lanking_unit {
+  align-items: center;
+  justify-content: center;
+  margin: 0.8rem;
+}

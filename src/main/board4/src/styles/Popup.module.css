@@ -1,0 +1,38 @@
+.siren {
+  width: 20px;
+  height: 20px;
+  color: red;
+}
+
+.siren:hover {
+  cursor: pointer;
+}
+
+.title {
+  display: flex;
+  
+  margin: 0 auto;
+  margin-top: 1vh;
+  margin-bottom: 2vh;
+
+  width: 80%;
+}
+
+.content {
+  display: flex;
+
+  margin: 0 auto;
+  margin-bottom: 2vh;
+
+  width: 80%;
+  height: 55%;
+}
+
+.btn {
+  margin-left: 17vw;
+  margin-right: 0.5vw;
+}
+
+.textBox {
+  font-size: 20px;
+}

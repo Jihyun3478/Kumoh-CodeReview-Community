@@ -1,0 +1,42 @@
+.container {
+  margin-bottom: 3vh;
+}
+
+.WriteBoard {
+  width: 80vw;
+  height: 100%;
+  
+  margin: 0 auto;
+
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+
+  border: none;
+}
+
+.Line {
+  width: 100%;
+  height: 2vh;
+
+  border-bottom: 1px solid black;
+}
+
+.Line2 {
+  width: 100%;
+  height: 2vh;
+}
+
+.WriteSpace {
+  width: 100%;
+  height: 20vh;
+  
+  border: none;
+  margin: 10vh auto 0;
+}
+
+.didiv {
+  display: inline-block;
+
+  width: 10vw;
+  margin-left: 73vw;
+}

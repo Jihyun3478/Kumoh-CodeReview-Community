@@ -1,0 +1,34 @@
+@font-face {
+    font-family: 'GmarketSansBold';
+    src: url('../../public/GmarketSansOTF/GmarketSansBold.otf') format('opentype');
+  }
+
+* {
+    font-family: 'GmarketSansBold';
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    height: 5vh;
+    min-height: 3vh;
+    border-top: var(--qna_board_under_bar_border);
+    border-bottom: var(--qna_board_under_bar_border);
+    font-size: 20px;
+
+    margin-top: -8vh;
+}
+
+.title {
+    flex: var(--title_flex_ratio);
+    text-align: center;
+    background-color: white;
+}
+
+.writer, .dated, .hit {
+    flex: var(--remnant_flex_ratio);
+    text-align: center;
+    background-color: white;
+}

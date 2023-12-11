@@ -1,0 +1,19 @@
+.CommentBox {
+  margin-top: 1vh;
+  margin-left: 1vw;
+  margin-bottom: 1vh;
+  
+  padding-left: 1vw;
+  padding-top: 2vh;
+
+  height: 10vh;
+  width: 96%;
+
+  font-size: 20px;
+  font-family: 'GMarketSansMedium';
+
+  border-radius: 20px;
+  border: none;
+
+  background-color: #AAD4E0;
+}

@@ -1,0 +1,60 @@
+.container {
+  margin: 0 auto;
+  display: flex;
+  column-gap: 2vh;
+  flex-direction: column;
+  
+  margin-top: 8vh;
+  width: 30vw;
+  height: 38vh;
+  border: 1px solid black;
+}
+
+.textBox {
+  width: 20vw;
+  height: 3vh;
+  margin-top: 2.5vh;
+  margin-bottom: 1.5vh;
+  background-color: lavender;
+  border: 0.5px solid black;
+}
+
+.emailBox {
+  width: 20vw;
+  height: 3vh;
+  margin-bottom: 1.5vh;
+  background-color: lavender;
+  border: 0.5px solid black;
+}
+
+.passwordBox {
+  width: 20vw;
+  height: 3vh;
+  margin-bottom: 1.5vh;
+  background-color: lavender;
+  border: 0.5px solid black;
+}
+
+.nickNameBox {
+  width: 20vw;
+  height: 3vh;
+  margin-bottom: 1.5vh;
+  background-color: lavender;
+  border: 0.5px solid black;
+}
+
+.btn {
+  padding: 8px;
+}
+
+.btn:hover {
+  cursor: pointer;
+}
+
+.title {
+  text-align: center;
+  margin-top: 3vh;
+  padding-bottom: 3vh;
+  border-bottom: 2px solid black;
+}
+

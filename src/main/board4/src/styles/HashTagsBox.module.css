@@ -1,0 +1,47 @@
+@font-face {
+    font-family: 'GmarketSansLight';
+    src: url('../../public/GmarketSansOTF/GmarketSansLight.otf') format('opentype');
+  }
+
+.container {
+    width: 78vw;
+    height: 2vh;
+
+    margin-left: 1vw;
+    margin-bottom: 1vh;
+
+    display: flex;
+    justify-content: space-between;
+}
+
+.hashTagBox {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    overflow: hidden;
+}
+
+.hashTag {
+    padding-right: 5px;
+    font-size: 15px;
+    font-family: 'GmarketSansLight';
+    font-weight: bold;
+}
+
+.likes {
+    font-size: 15px;
+    font-family: 'GmarketSansMedium';
+}
+
+.likeIcon {
+    color: red;
+    font-size: 25px;
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
+.likeDiv {
+    display: flex;
+    align-items: center;
+}

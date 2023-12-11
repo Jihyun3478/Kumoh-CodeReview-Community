@@ -1,0 +1,19 @@
+.title {
+  display: flex;
+
+  padding-left: 1vw;
+
+  height: 7vh;
+  width: 100%;
+
+  border: none;
+
+  align-items: center;
+
+  font-size: 40px;
+
+  border-radius: 20px;
+
+  background-color: lavender;
+  font-family: 'GmarketSansMedium';
+}

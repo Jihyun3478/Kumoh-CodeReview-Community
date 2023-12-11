@@ -1,0 +1,19 @@
+.flexBox {
+  display: flex;
+}
+
+.container {
+  width: 80vw;
+  height: 30vh;
+
+  margin: 0 auto;
+  
+  border: 1px solid blue;
+  display: block;
+}
+
+.btn {
+  height: 17vh;
+
+  margin-top: 2vh;
+}

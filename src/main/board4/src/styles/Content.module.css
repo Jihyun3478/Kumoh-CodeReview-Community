@@ -1,0 +1,57 @@
+.contentBox {
+    margin: 0 auto;
+    width: 80vw;
+    height: 100%;
+
+    margin-top: 5vh;
+
+    margin-bottom: 15vh;
+}
+
+.hrDiv {
+    border-bottom: 2px solid black;
+}
+
+.codeBox {
+    display: flex;
+
+    margin-top: 2vh;
+    margin-left: 2vw;
+
+
+    font-size: 15px;
+    font-family: 'GMarketSansMedium';
+}
+
+.btn {
+    width: 3vw;
+    border: none;
+
+    font-family: 'GmarketSansMedium';
+    font-size: 20px;
+
+    background-color: white;
+}
+
+.pagingDiv {
+    display: flex;
+    justify-content: center;
+
+    margin-top: 3vh;
+
+    height: 5vh;
+}
+
+.hrDiv2 {
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+    border-bottom: 2px solid black;
+}
+
+.popDiv {
+    margin-left: 78.4vw;
+}
+
+.btnDiv {
+    display: inline-block;
+}

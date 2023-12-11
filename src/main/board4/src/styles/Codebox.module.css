@@ -1,0 +1,18 @@
+.App {
+  width: 80vw;
+  display: flex;
+  justify-content: center;
+}
+
+.codebox {
+  width: 80vw;
+
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 20px;
+  white-space: pre-wrap;
+  line-height: 1.6;
+  overflow-x: auto;
+}
